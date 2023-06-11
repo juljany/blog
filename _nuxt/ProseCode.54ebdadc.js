@@ -1,0 +1,1 @@
+import{a as _,r as s,o as t,c,w as n,b as a}from"./entry.c554e7db.js";const r={};function d(e,l){const o=s("v-card");return t(),c(o,{color:"deep-purple-lighten-4",class:"ma-4 pa-4"},{default:n(()=>[a(e.$slots,"default",{},void 0,!0)]),_:3})}const u=_(r,[["render",d],["__scopeId","data-v-00fb41bc"]]);export{u as default};

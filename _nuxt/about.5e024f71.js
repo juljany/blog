@@ -1,0 +1,1 @@
+import{a as e,e as t,o,k as s}from"./entry.c554e7db.js";const a={},c=s("p",null,"This page will be displayed at the /about route.",-1),n=[c];function r(_,l){return o(),t("section",null,n)}const d=e(a,[["render",r]]);export{d as default};
