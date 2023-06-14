@@ -1,0 +1,1 @@
+import{b as o,o as s,i as t,h as n}from"./entry.2a6126ff.js";const c={},l={class:"bg-CodeInline",style:{"font-family":"consolas","font-style":"italic"}};function a(e,r){return s(),t("code",l,[n(e.$slots,"default")])}const i=o(c,[["render",a]]);export{i as default};
