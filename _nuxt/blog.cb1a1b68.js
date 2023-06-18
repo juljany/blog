@@ -1,0 +1,1 @@
+import{_ as e}from"./layout.32b6016b.js";import{b as n,c,w as _,o as a,k as o}from"./entry.e553207c.js";const s={},r=o("main",null,[o("h1",null,"blog")],-1);function l(u,f){const t=e;return a(),c(t,null,{default:_(()=>[r]),_:1})}const p=n(s,[["render",l]]);export{p as default};

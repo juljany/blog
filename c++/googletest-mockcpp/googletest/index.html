@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html >
+<head><meta charset="utf-8">
+<title>GoogleTest测试注册代码理解</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style id="vuetify-theme-stylesheet">:root {
+      --v-theme-background: 255,255,255;
+      --v-theme-background-overlay-multiplier: 1;
+      --v-theme-surface: 255,255,255;
+      --v-theme-surface-overlay-multiplier: 1;
+      --v-theme-surface-variant: 66,66,66;
+      --v-theme-surface-variant-overlay-multiplier: 2;
+      --v-theme-on-surface-variant: 238,238,238;
+      --v-theme-primary: 229,57,53;
+      --v-theme-primary-overlay-multiplier: 1;
+      --v-theme-primary-darken-1: 55,0,179;
+      --v-theme-primary-darken-1-overlay-multiplier: 2;
+      --v-theme-secondary: 3,218,198;
+      --v-theme-secondary-overlay-multiplier: 1;
+      --v-theme-secondary-darken-1: 1,135,134;
+      --v-theme-secondary-darken-1-overlay-multiplier: 1;
+      --v-theme-error: 176,0,32;
+      --v-theme-error-overlay-multiplier: 2;
+      --v-theme-info: 33,150,243;
+      --v-theme-info-overlay-multiplier: 1;
+      --v-theme-success: 76,175,80;
+      --v-theme-success-overlay-multiplier: 1;
+      --v-theme-warning: 251,140,0;
+      --v-theme-warning-overlay-multiplier: 1;
+      --v-theme-CodeInline: 249,251,231;
+      --v-theme-CodeInline-overlay-multiplier: 1;
+      --v-theme-on-background: 0,0,0;
+      --v-theme-on-surface: 0,0,0;
+      --v-theme-on-primary: 255,255,255;
+      --v-theme-on-primary-darken-1: 255,255,255;
+      --v-theme-on-secondary: 0,0,0;
+      --v-theme-on-secondary-darken-1: 255,255,255;
+      --v-theme-on-error: 255,255,255;
+      --v-theme-on-info: 255,255,255;
+      --v-theme-on-success: 255,255,255;
+      --v-theme-on-warning: 255,255,255;
+      --v-theme-on-CodeInline: 0,0,0;
+      --v-border-color: 0, 0, 0;
+      --v-border-opacity: 0.12;
+      --v-high-emphasis-opacity: 0.87;
+      --v-medium-emphasis-opacity: 0.6;
+      --v-disabled-opacity: 0.38;
+      --v-idle-opacity: 0.04;
+      --v-hover-opacity: 0.04;
+      --v-focus-opacity: 0.12;
+      --v-selected-opacity: 0.08;
+      --v-activated-opacity: 0.12;
+      --v-pressed-opacity: 0.12;
+      --v-dragged-opacity: 0.08;
+      --v-theme-kbd: 33, 37, 41;
+      --v-theme-on-kbd: 255, 255, 255;
+      --v-theme-code: 245, 245, 245;
+      --v-theme-on-code: 0, 0, 0;
+    }
+    .v-theme--light {
+      color-scheme: normal;
+      --v-theme-background: 255,255,255;
+      --v-theme-background-overlay-multiplier: 1;
+      --v-theme-surface: 255,255,255;
+      --v-theme-surface-overlay-multiplier: 1;
+      --v-theme-surface-variant: 66,66,66;
+      --v-theme-surface-variant-overlay-multiplier: 2;
+      --v-theme-on-surface-variant: 238,238,238;
+      --v-theme-primary: 98,0,238;
+      --v-theme-primary-overlay-multiplier: 2;
+      --v-theme-primary-darken-1: 55,0,179;
+      --v-theme-primary-darken-1-overlay-multiplier: 2;
+      --v-theme-secondary: 3,218,198;
+      --v-theme-secondary-overlay-multiplier: 1;
+      --v-theme-secondary-darken-1: 1,135,134;
+      --v-theme-secondary-darken-1-overlay-multiplier: 1;
+      --v-theme-error: 176,0,32;
+      --v-theme-error-overlay-multiplier: 2;
+      --v-theme-info: 33,150,243;
+      --v-theme-info-overlay-multiplier: 1;
+      --v-theme-success: 76,175,80;
+      --v-theme-success-overlay-multiplier: 1;
+      --v-theme-warning: 251,140,0;
+      --v-theme-warning-overlay-multiplier: 1;
+      --v-theme-on-background: 0,0,0;
+      --v-theme-on-surface: 0,0,0;
+      --v-theme-on-primary: 255,255,255;
+      --v-theme-on-primary-darken-1: 255,255,255;
+      --v-theme-on-secondary: 0,0,0;
+      --v-theme-on-secondary-darken-1: 255,255,255;
+      --v-theme-on-error: 255,255,255;
+      --v-theme-on-info: 255,255,255;
+      --v-theme-on-success: 255,255,255;
+      --v-theme-on-warning: 255,255,255;
+      --v-border-color: 0, 0, 0;
+      --v-border-opacity: 0.12;
+      --v-high-emphasis-opacity: 0.87;
+      --v-medium-emphasis-opacity: 0.6;
+      --v-disabled-opacity: 0.38;
+      --v-idle-opacity: 0.04;
+      --v-hover-opacity: 0.04;
+      --v-focus-opacity: 0.12;
+      --v-selected-opacity: 0.08;
+      --v-activated-opacity: 0.12;
+      --v-pressed-opacity: 0.12;
+      --v-dragged-opacity: 0.08;
+      --v-theme-kbd: 33, 37, 41;
+      --v-theme-on-kbd: 255, 255, 255;
+      --v-theme-code: 245, 245, 245;
+      --v-theme-on-code: 0, 0, 0;
+    }
+    .v-theme--dark {
+      color-scheme: dark;
+      --v-theme-background: 18,18,18;
+      --v-theme-background-overlay-multiplier: 1;
+      --v-theme-surface: 33,33,33;
+      --v-theme-surface-overlay-multiplier: 1;
+      --v-theme-surface-variant: 189,189,189;
+      --v-theme-surface-variant-overlay-multiplier: 2;
+      --v-theme-on-surface-variant: 66,66,66;
+      --v-theme-primary: 187,134,252;
+      --v-theme-primary-overlay-multiplier: 2;
+      --v-theme-primary-darken-1: 55,0,179;
+      --v-theme-primary-darken-1-overlay-multiplier: 1;
+      --v-theme-secondary: 3,218,197;
+      --v-theme-secondary-overlay-multiplier: 2;
+      --v-theme-secondary-darken-1: 3,218,197;
+      --v-theme-secondary-darken-1-overlay-multiplier: 2;
+      --v-theme-error: 207,102,121;
+      --v-theme-error-overlay-multiplier: 2;
+      --v-theme-info: 33,150,243;
+      --v-theme-info-overlay-multiplier: 2;
+      --v-theme-success: 76,175,80;
+      --v-theme-success-overlay-multiplier: 2;
+      --v-theme-warning: 251,140,0;
+      --v-theme-warning-overlay-multiplier: 2;
+      --v-theme-on-background: 255,255,255;
+      --v-theme-on-surface: 255,255,255;
+      --v-theme-on-primary: 255,255,255;
+      --v-theme-on-primary-darken-1: 255,255,255;
+      --v-theme-on-secondary: 0,0,0;
+      --v-theme-on-secondary-darken-1: 0,0,0;
+      --v-theme-on-error: 255,255,255;
+      --v-theme-on-info: 255,255,255;
+      --v-theme-on-success: 255,255,255;
+      --v-theme-on-warning: 255,255,255;
+      --v-border-color: 255, 255, 255;
+      --v-border-opacity: 0.12;
+      --v-high-emphasis-opacity: 1;
+      --v-medium-emphasis-opacity: 0.7;
+      --v-disabled-opacity: 0.5;
+      --v-idle-opacity: 0.1;
+      --v-hover-opacity: 0.04;
+      --v-focus-opacity: 0.12;
+      --v-selected-opacity: 0.08;
+      --v-activated-opacity: 0.12;
+      --v-pressed-opacity: 0.16;
+      --v-dragged-opacity: 0.08;
+      --v-theme-kbd: 33, 37, 41;
+      --v-theme-on-kbd: 255, 255, 255;
+      --v-theme-code: 52, 52, 52;
+      --v-theme-on-code: 204, 204, 204;
+    }
+    .v-theme--YorFoger {
+      color-scheme: normal;
+      --v-theme-background: 255,255,255;
+      --v-theme-background-overlay-multiplier: 1;
+      --v-theme-surface: 255,255,255;
+      --v-theme-surface-overlay-multiplier: 1;
+      --v-theme-surface-variant: 66,66,66;
+      --v-theme-surface-variant-overlay-multiplier: 2;
+      --v-theme-on-surface-variant: 238,238,238;
+      --v-theme-primary: 229,57,53;
+      --v-theme-primary-overlay-multiplier: 1;
+      --v-theme-primary-darken-1: 55,0,179;
+      --v-theme-primary-darken-1-overlay-multiplier: 2;
+      --v-theme-secondary: 3,218,198;
+      --v-theme-secondary-overlay-multiplier: 1;
+      --v-theme-secondary-darken-1: 1,135,134;
+      --v-theme-secondary-darken-1-overlay-multiplier: 1;
+      --v-theme-error: 176,0,32;
+      --v-theme-error-overlay-multiplier: 2;
+      --v-theme-info: 33,150,243;
+      --v-theme-info-overlay-multiplier: 1;
+      --v-theme-success: 76,175,80;
+      --v-theme-success-overlay-multiplier: 1;
+      --v-theme-warning: 251,140,0;
+      --v-theme-warning-overlay-multiplier: 1;
+      --v-theme-CodeInline: 249,251,231;
+      --v-theme-CodeInline-overlay-multiplier: 1;
+      --v-theme-on-background: 0,0,0;
+      --v-theme-on-surface: 0,0,0;
+      --v-theme-on-primary: 255,255,255;
+      --v-theme-on-primary-darken-1: 255,255,255;
+      --v-theme-on-secondary: 0,0,0;
+      --v-theme-on-secondary-darken-1: 255,255,255;
+      --v-theme-on-error: 255,255,255;
+      --v-theme-on-info: 255,255,255;
+      --v-theme-on-success: 255,255,255;
+      --v-theme-on-warning: 255,255,255;
+      --v-theme-on-CodeInline: 0,0,0;
+      --v-border-color: 0, 0, 0;
+      --v-border-opacity: 0.12;
+      --v-high-emphasis-opacity: 0.87;
+      --v-medium-emphasis-opacity: 0.6;
+      --v-disabled-opacity: 0.38;
+      --v-idle-opacity: 0.04;
+      --v-hover-opacity: 0.04;
+      --v-focus-opacity: 0.12;
+      --v-selected-opacity: 0.08;
+      --v-activated-opacity: 0.12;
+      --v-pressed-opacity: 0.12;
+      --v-dragged-opacity: 0.08;
+      --v-theme-kbd: 33, 37, 41;
+      --v-theme-on-kbd: 255, 255, 255;
+      --v-theme-code: 245, 245, 245;
+      --v-theme-on-code: 0, 0, 0;
+    }
+    .bg-background {
+      --v-theme-overlay-multiplier: var(--v-theme-background-overlay-multiplier);
+      background-color: rgb(var(--v-theme-background)) !important;
+      color: rgb(var(--v-theme-on-background)) !important;
+    }
+    .bg-surface {
+      --v-theme-overlay-multiplier: var(--v-theme-surface-overlay-multiplier);
+      background-color: rgb(var(--v-theme-surface)) !important;
+      color: rgb(var(--v-theme-on-surface)) !important;
+    }
+    .bg-surface-variant {
+      --v-theme-overlay-multiplier: var(--v-theme-surface-variant-overlay-multiplier);
+      background-color: rgb(var(--v-theme-surface-variant)) !important;
+      color: rgb(var(--v-theme-on-surface-variant)) !important;
+    }
+    .bg-primary {
+      --v-theme-overlay-multiplier: var(--v-theme-primary-overlay-multiplier);
+      background-color: rgb(var(--v-theme-primary)) !important;
+      color: rgb(var(--v-theme-on-primary)) !important;
+    }
+    .bg-primary-darken-1 {
+      --v-theme-overlay-multiplier: var(--v-theme-primary-darken-1-overlay-multiplier);
+      background-color: rgb(var(--v-theme-primary-darken-1)) !important;
+      color: rgb(var(--v-theme-on-primary-darken-1)) !important;
+    }
+    .bg-secondary {
+      --v-theme-overlay-multiplier: var(--v-theme-secondary-overlay-multiplier);
+      background-color: rgb(var(--v-theme-secondary)) !important;
+      color: rgb(var(--v-theme-on-secondary)) !important;
+    }
+    .bg-secondary-darken-1 {
+      --v-theme-overlay-multiplier: var(--v-theme-secondary-darken-1-overlay-multiplier);
+      background-color: rgb(var(--v-theme-secondary-darken-1)) !important;
+      color: rgb(var(--v-theme-on-secondary-darken-1)) !important;
+    }
+    .bg-error {
+      --v-theme-overlay-multiplier: var(--v-theme-error-overlay-multiplier);
+      background-color: rgb(var(--v-theme-error)) !important;
+      color: rgb(var(--v-theme-on-error)) !important;
+    }
+    .bg-info {
+      --v-theme-overlay-multiplier: var(--v-theme-info-overlay-multiplier);
+      background-color: rgb(var(--v-theme-info)) !important;
+      color: rgb(var(--v-theme-on-info)) !important;
+    }
+    .bg-success {
+      --v-theme-overlay-multiplier: var(--v-theme-success-overlay-multiplier);
+      background-color: rgb(var(--v-theme-success)) !important;
+      color: rgb(var(--v-theme-on-success)) !important;
+    }
+    .bg-warning {
+      --v-theme-overlay-multiplier: var(--v-theme-warning-overlay-multiplier);
+      background-color: rgb(var(--v-theme-warning)) !important;
+      color: rgb(var(--v-theme-on-warning)) !important;
+    }
+    .bg-CodeInline {
+      --v-theme-overlay-multiplier: var(--v-theme-CodeInline-overlay-multiplier);
+      background-color: rgb(var(--v-theme-CodeInline)) !important;
+      color: rgb(var(--v-theme-on-CodeInline)) !important;
+    }
+    .bg-on-CodeInline {
+      --v-theme-overlay-multiplier: var(--v-theme-on-CodeInline-overlay-multiplier);
+      background-color: rgb(var(--v-theme-on-CodeInline)) !important;
+      color: rgb(var(--v-theme-on-on-CodeInline)) !important;
+    }
+    .text-background {
+      color: rgb(var(--v-theme-background)) !important;
+    }
+    .border-background {
+      --v-border-color: var(--v-theme-background);
+    }
+    .text-surface {
+      color: rgb(var(--v-theme-surface)) !important;
+    }
+    .border-surface {
+      --v-border-color: var(--v-theme-surface);
+    }
+    .text-surface-variant {
+      color: rgb(var(--v-theme-surface-variant)) !important;
+    }
+    .border-surface-variant {
+      --v-border-color: var(--v-theme-surface-variant);
+    }
+    .on-surface-variant {
+      color: rgb(var(--v-theme-on-surface-variant)) !important;
+    }
+    .text-primary {
+      color: rgb(var(--v-theme-primary)) !important;
+    }
+    .border-primary {
+      --v-border-color: var(--v-theme-primary);
+    }
+    .text-primary-darken-1 {
+      color: rgb(var(--v-theme-primary-darken-1)) !important;
+    }
+    .border-primary-darken-1 {
+      --v-border-color: var(--v-theme-primary-darken-1);
+    }
+    .text-secondary {
+      color: rgb(var(--v-theme-secondary)) !important;
+    }
+    .border-secondary {
+      --v-border-color: var(--v-theme-secondary);
+    }
+    .text-secondary-darken-1 {
+      color: rgb(var(--v-theme-secondary-darken-1)) !important;
+    }
+    .border-secondary-darken-1 {
+      --v-border-color: var(--v-theme-secondary-darken-1);
+    }
+    .text-error {
+      color: rgb(var(--v-theme-error)) !important;
+    }
+    .border-error {
+      --v-border-color: var(--v-theme-error);
+    }
+    .text-info {
+      color: rgb(var(--v-theme-info)) !important;
+    }
+    .border-info {
+      --v-border-color: var(--v-theme-info);
+    }
+    .text-success {
+      color: rgb(var(--v-theme-success)) !important;
+    }
+    .border-success {
+      --v-border-color: var(--v-theme-success);
+    }
+    .text-warning {
+      color: rgb(var(--v-theme-warning)) !important;
+    }
+    .border-warning {
+      --v-border-color: var(--v-theme-warning);
+    }
+    .on-background {
+      color: rgb(var(--v-theme-on-background)) !important;
+    }
+    .on-surface {
+      color: rgb(var(--v-theme-on-surface)) !important;
+    }
+    .on-primary {
+      color: rgb(var(--v-theme-on-primary)) !important;
+    }
+    .on-primary-darken-1 {
+      color: rgb(var(--v-theme-on-primary-darken-1)) !important;
+    }
+    .on-secondary {
+      color: rgb(var(--v-theme-on-secondary)) !important;
+    }
+    .on-secondary-darken-1 {
+      color: rgb(var(--v-theme-on-secondary-darken-1)) !important;
+    }
+    .on-error {
+      color: rgb(var(--v-theme-on-error)) !important;
+    }
+    .on-info {
+      color: rgb(var(--v-theme-on-info)) !important;
+    }
+    .on-success {
+      color: rgb(var(--v-theme-on-success)) !important;
+    }
+    .on-warning {
+      color: rgb(var(--v-theme-on-warning)) !important;
+    }
+    .text-CodeInline {
+      color: rgb(var(--v-theme-CodeInline)) !important;
+    }
+    .border-CodeInline {
+      --v-border-color: var(--v-theme-CodeInline);
+    }
+    .text-on-CodeInline {
+      color: rgb(var(--v-theme-on-CodeInline)) !important;
+    }
+    .border-on-CodeInline {
+      --v-border-color: var(--v-theme-on-CodeInline);
+    }
+</style>
+<meta property="og:title" content="GoogleTest测试注册代码理解"><link rel="preload" as="fetch" crossorigin="anonymous" href="/blog/c++/googletest-mockcpp/googletest/_payload.json"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/entry.e553207c.js"><link rel="preload" as="style" href="/blog/_nuxt/entry.b043d1a7.css"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/_...slug_.be3c01d9.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ContentDoc.58fc24c8.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ContentRenderer.90e4c91f.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ContentRendererMarkdown.7c4d2474.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/index.a6ef77ff.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/preview.d5038eff.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ContentQuery.bcea7794.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/query.8dda56df.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/utils.31324891.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/layout.32b6016b.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/blog-content.6e38d9f7.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/Footer.52cf7c72.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseH1.df10f929.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseHr.aa6a2133.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseH2.e7c17da2.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseP.a4323d6e.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseA.fc9469bb.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/nuxt-link.b8dd1c62.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseH3.0b68dab4.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseCodeInline.cca77122.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseCode.cad89159.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseUl.0de06e24.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseLi.c5f8132c.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseH4.91bb0c90.js"><link rel="prefetch" as="script" crossorigin href="/blog/_nuxt/default.b7a3942d.js"><link rel="prefetch" as="script" crossorigin href="/blog/_nuxt/error-component.6a8e7070.js"><link rel="stylesheet" href="/blog/_nuxt/entry.b043d1a7.css"><style>pre code .line{display:block;font-family:consolas;min-height:1rem}.highlight{background-color:#adff2f}.v-enter-active,.v-leave-active{transition:opacity .5s ease}.v-enter-from,.v-leave-to{opacity:0}</style><style>ul.custum-ul{list-style-type:square}</style></head>
+<body ><div id="__nuxt"><div class="v-application v-theme--YorFoger v-layout v-layout--full-height v-locale--is-ltr" style="z-index:1000;"><div class="v-application__wrap"><!--[--><header class="v-toolbar v-toolbar--density-default elevation-2 v-theme--YorFoger v-locale--is-ltr v-app-bar" style="top:0;z-index:1004;transform:translateY(0%);position:fixed;transition:none !important;"><!----><!--[--><div class="v-toolbar__content" style="height:64px;"><!----><!----><!----><div class="v-toolbar__append"><!--[--><div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-locale--is-ltr v-input--dirty v-switch v-switch--inset" style=""><!----><div class="v-input__control"><!--[--><div class="v-selection-control v-selection-control--density-default" style=""><div class="v-selection-control__wrapper" style=""><!--[--><div class="v-switch__track"></div><!--]--><div class="v-selection-control__input"><!----><input id="switch-1" aria-disabled="false" type="checkbox" value="true" aria-describedby="switch-1-messages"><!--[--><div class="v-switch__thumb" style=""><!----></div><!--]--></div></div><label class="v-label v-label--clickable" style="" for="switch-1"><!----><!--[-->Dark<!--]--></label></div><!--]--></div><!----><div class="v-input__details"><div class="v-messages" style="" role="alert" aria-live="polite" id="switch-1-messages"></div><!----></div></div><!--]--></div></div><!--]--><!--[--><!----><!--]--></header><main class="v-main" style="--v-layout-left:0px;--v-layout-right:0px;--v-layout-top:0px;--v-layout-bottom:0px;transition:none !important;"><!--[--><div class="v-container v-container--fluid v-locale--is-ltr d-flex justify-center" style=""><div class="v-card v-theme--YorFoger v-card--density-default elevation-0 v-card--variant-elevated px-12 py-8" style="width:1000px;"><!----><div class="v-card__loader"><div class="v-progress-linear v-theme--YorFoger v-locale--is-ltr" style="top:0;height:0;--v-progress-linear-height:2px;left:50%;transform:translateX(-50%);" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100"><!----><div class="v-progress-linear__background" style="width:100%;"></div><div class="v-progress-linear__indeterminate"><!--[--><div class="v-progress-linear__indeterminate long" style=""></div><div class="v-progress-linear__indeterminate short" style=""></div><!--]--></div><!----></div></div><!----><!----><!--[--><!--[--><!--[--><div><h1 id="googletest"><!--[-->GoogleTest<!--]--></h1><hr><h2 id="注册测试" class="mt-8 mb-4"><a href="#注册测试" class="ml-n12 mr-4"><i class="mdi-format-header-2 mdi v-icon notranslate v-theme--YorFoger v-icon--size-small" style="" aria-hidden="true"></i></a><!--[-->注册测试<!--]--></h2><p class="my-2"><!--[-->这一个节用我自己写的代码展示GoogleTest如何注册测试。<!--]--></p><!--[--><h4 id="基础" class="mt-6 mb-2"><!----><!--[-->基础<!--]--></h4><!--]--><p class="my-2"><!--[-->如下文代码所示，初始化子类的静态成员变量<code class="bg-CodeInline" style="font-family:consolas;font-style:italic;"><!--[-->static shared_ptr&lt;test_t&gt; test_info;<!--]--></code>时，可调用基类的静态成员方法<code class="bg-CodeInline" style="font-family:consolas;font-style:italic;"><!--[-->test_t::register_test()<!--]--></code>，从而将一个子类对象地址存放到基类的的静态成员变量<code class="bg-CodeInline" style="font-family:consolas;font-style:italic;"><!--[-->static vector&lt;shared_ptr&lt;test_t&gt;&gt; v_tests;<!--]--></code>或全局变量vector中。<!--]--></p><p class="my-2"><!--[-->执行测试时，使用基类指针调用虚函数<code class="bg-CodeInline" style="font-family:consolas;font-style:italic;"><!--[-->test_info-&gt;test_body();<!--]--></code>，可执行到每一个子类的重写虚函数。<!--]--></p><!--[--><div class="v-card v-theme--YorFoger v-card--density-default elevation-0 v-card--variant-outlined" style=""><!----><div class="v-card__loader"><div class="v-progress-linear v-theme--YorFoger v-locale--is-ltr" style="top:0;height:0;--v-progress-linear-height:2px;left:50%;transform:translateX(-50%);" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100"><!----><div class="v-progress-linear__background" style="width:100%;"></div><div class="v-progress-linear__indeterminate"><!--[--><div class="v-progress-linear__indeterminate long" style=""></div><div class="v-progress-linear__indeterminate short" style=""></div><!--]--></div><!----></div></div><!----><!----><!--[--><span class="v-chip v-theme--YorFoger v-chip--density-default v-chip--size-default v-chip--variant-text" style="position:absolute;right:0;top:0;font-family:consolas;" draggable="false"><!--[--><!----><span class="v-chip__underlay"></span><!--]--><!----><!----><div class="v-chip__content">main.c</div><!----><!----></span><div class="v-container v-locale--is-ltr overflow-x-auto pa-0" style=""><div class="v-card-text" style="display:inline-block;min-width:100%;"><!--[--><pre><code><span class="line" line="1"><span class="ct-212458">#include</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&lt;iostream&gt;
+</span></span><span class="line" line="2"><span class="ct-212458">#include</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&lt;memory&gt;
+</span></span><span class="line" line="3"><span class="ct-212458">#include</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&lt;vector&gt;
+</span></span><span class="line" line="4"><span>
+</span></span><span class="line" line="5"><span class="ct-212458">using</span><span class="ct-730e80"> </span><span class="ct-52c52f">namespace</span><span class="ct-730e80"> </span><span class="ct-a6dbaa">std</span><span class="ct-730e80">;
+</span></span><span class="line" line="6"><span>
+</span></span><span class="line" line="7"><span class="ct-3d0913">/* 基类 */
+</span></span><span class="line" line="8"><span class="ct-52c52f">class</span><span class="ct-730e80"> </span><span class="ct-a6dbaa">test_t</span><span class="ct-730e80"> {
+</span></span><span class="line" line="9"><span class="ct-52c52f">public:
+</span></span><span class="line" line="10"><span class="ct-730e80">    </span><span class="ct-212458">virtual</span><span class="ct-730e80"> </span><span class="ct-09fd12">~test_t</span><span class="ct-730e80">(){};
+</span></span><span class="line" line="11"><span class="ct-730e80">    </span><span class="ct-212458">virtual</span><span class="ct-730e80"> </span><span class="ct-52c52f">void</span><span class="ct-730e80"> </span><span class="ct-09fd12">test_body</span><span class="ct-730e80">(){};
+</span></span><span class="line" line="12"><span>
+</span></span><span class="line" line="13"><span class="ct-3d0913">    /* 初始化子类的静态成员变量时被调用。接收一个子类对象指针，存放到静态成员v_tests。*/
+</span></span><span class="line highlight" line="14"><span class="ct-730e80">    </span><span class="ct-212458">static</span><span class="ct-730e80"> </span><span class="ct-a6dbaa">shared_ptr</span><span class="ct-730e80">&lt;</span><span class="ct-d14fc3">test_t</span><span class="ct-730e80">&gt; </span><span class="ct-09fd12">register_test</span><span class="ct-730e80">(</span><span class="ct-a6dbaa">shared_ptr</span><span class="ct-730e80">&lt;</span><span class="ct-d14fc3">test_t</span><span class="ct-730e80">&gt; </span><span class="ct-ac0022">sp</span><span class="ct-730e80">) {
+</span></span><span class="line" line="15"><span class="ct-730e80">        v_tests.</span><span class="ct-09fd12">push_back</span><span class="ct-730e80">(sp);
+</span></span><span class="line" line="16"><span class="ct-730e80">        </span><span class="ct-212458">return</span><span class="ct-730e80"> sp;
+</span></span><span class="line" line="17"><span class="ct-3d0913">        // return nullptr; // 也可以返回NULL。
+</span></span><span class="line" line="18"><span class="ct-730e80">    }
+</span></span><span class="line" line="19"><span>
+</span></span><span class="line" line="20"><span class="ct-52c52f">public:
+</span></span><span class="line highlight" line="21"><span class="ct-730e80">    </span><span class="ct-212458">static</span><span class="ct-730e80"> vector</span><span class="ct-212458">&lt;</span><span class="ct-730e80">shared_ptr</span><span class="ct-212458">&lt;</span><span class="ct-d14fc3">test_t</span><span class="ct-212458">&gt;&gt;</span><span class="ct-730e80"> v_tests;
+</span></span><span class="line" line="22"><span class="ct-730e80">};
+</span></span><span class="line" line="23"><span class="ct-730e80">vector</span><span class="ct-212458">&lt;</span><span class="ct-730e80">shared_ptr</span><span class="ct-212458">&lt;</span><span class="ct-d14fc3">test_t</span><span class="ct-212458">&gt;&gt;</span><span class="ct-730e80"> </span><span class="ct-d14fc3">test_t</span><span class="ct-730e80">::v_tests </span><span class="ct-212458">=</span><span class="ct-730e80"> </span><span class="ct-09fd12">vector</span><span class="ct-730e80">&lt;</span><span class="ct-a6dbaa">shared_ptr</span><span class="ct-730e80">&lt;</span><span class="ct-d14fc3">test_t</span><span class="ct-730e80">&gt;&gt;();
+</span></span><span class="line" line="24"><span>
+</span></span><span class="line" line="25"><span class="ct-3d0913">/* 子类 */
+</span></span><span class="line" line="26"><span class="ct-52c52f">class</span><span class="ct-730e80"> </span><span class="ct-a6dbaa">test_A_t</span><span class="ct-730e80"> : </span><span class="ct-52c52f">public</span><span class="ct-730e80"> </span><span class="ct-d14fc3">test_t</span><span class="ct-730e80"> {
+</span></span><span class="line" line="27"><span class="ct-52c52f">public:
+</span></span><span class="line" line="28"><span class="ct-730e80">    </span><span class="ct-09fd12">~test_A_t</span><span class="ct-730e80">() </span><span class="ct-212458">override</span><span class="ct-730e80">{};
+</span></span><span class="line highlight" line="29"><span class="ct-730e80">    </span><span class="ct-212458">virtual</span><span class="ct-730e80"> </span><span class="ct-52c52f">void</span><span class="ct-730e80"> </span><span class="ct-09fd12">test_body</span><span class="ct-730e80">() </span><span class="ct-212458">override</span><span class="ct-730e80"> { cout </span><span class="ct-212458">&lt;&lt;</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&quot;test_body of test_A_t&quot;</span><span class="ct-730e80"> </span><span class="ct-212458">&lt;&lt;</span><span class="ct-730e80"> endl; };
+</span></span><span class="line" line="30"><span>
+</span></span><span class="line" line="31"><span class="ct-52c52f">public:
+</span></span><span class="line" line="32"><span class="ct-3d0913">    /**
+</span></span><span class="line" line="33"><span class="ct-3d0913">     * 这个静态成员的作用是让程序有机会在所有函数之外执行一段程序。
+</span></span><span class="line" line="34"><span class="ct-3d0913">     * 即，对其初始化时，调用注册函数（基类的静态成员方法）。
+</span></span><span class="line" line="35"><span class="ct-3d0913">     */
+</span></span><span class="line" line="36"><span class="ct-730e80">    </span><span class="ct-212458">static</span><span class="ct-730e80"> shared_ptr</span><span class="ct-212458">&lt;</span><span class="ct-d14fc3">test_t</span><span class="ct-212458">&gt;</span><span class="ct-730e80"> test_info;
+</span></span><span class="line" line="37"><span class="ct-730e80">};
+</span></span><span class="line highlight" line="38"><span class="ct-730e80">shared_ptr</span><span class="ct-212458">&lt;</span><span class="ct-d14fc3">test_t</span><span class="ct-212458">&gt;</span><span class="ct-730e80"> </span><span class="ct-d14fc3">test_A_t</span><span class="ct-730e80">::test_info </span><span class="ct-212458">=</span><span class="ct-730e80"> </span><span class="ct-d14fc3">test_t</span><span class="ct-730e80">::</span><span class="ct-09fd12">register_test</span><span class="ct-730e80">(</span><span class="ct-09fd12">make_shared</span><span class="ct-730e80">&lt;</span><span class="ct-d14fc3">test_A_t</span><span class="ct-730e80">&gt;());
+</span></span><span class="line" line="39"><span>
+</span></span><span class="line" line="40"><span class="ct-52c52f">int</span><span class="ct-730e80"> </span><span class="ct-09fd12">main</span><span class="ct-730e80">() {
+</span></span><span class="line" line="41"><span class="ct-730e80">    </span><span class="ct-212458">for</span><span class="ct-730e80"> (</span><span class="ct-52c52f">int</span><span class="ct-730e80"> i </span><span class="ct-212458">=</span><span class="ct-730e80"> </span><span class="ct-cadfd3">0</span><span class="ct-730e80">; i </span><span class="ct-212458">&lt;</span><span class="ct-730e80"> </span><span class="ct-d14fc3">test_t</span><span class="ct-730e80">::v_tests.</span><span class="ct-09fd12">size</span><span class="ct-730e80">(); i</span><span class="ct-212458">++</span><span class="ct-730e80">) {
+</span></span><span class="line" line="42"><span class="ct-730e80">        </span><span class="ct-52c52f">auto</span><span class="ct-730e80"> test_info </span><span class="ct-212458">=</span><span class="ct-730e80"> </span><span class="ct-d14fc3">test_t</span><span class="ct-730e80">::v_tests[i];
+</span></span><span class="line highlight" line="43"><span class="ct-730e80">        test_info-&gt;</span><span class="ct-09fd12">test_body</span><span class="ct-730e80">();
+</span></span><span class="line" line="44"><span class="ct-730e80">    }
+</span></span><span class="line" line="45"><span class="ct-730e80">}</span></span></code></pre><!--]--></div></div><!----><!--]--><!----><!--[--><!----><span class="v-card__underlay"></span><!--]--></div><!--]--><p class="my-2"><!--[-->调试使用的CMake文件：<a aria-current="page" href="/blog/c++/googletest-mockcpp/googletest#cmakeliststxt" class="router-link-active router-link-exact-active"><!--[-->CMakeLists.txt<!--]--></a><!--]--></p><!--[--><h4 id="宏定义" class="mt-6 mb-2"><!----><!--[-->宏定义<!--]--></h4><!--]--><p class="my-2"><!--[-->将上节代码修改为宏定义。TEST宏包含了子类的定义，子类静态成员变量的初始化和子类test_body函数的定义。test_body函数的函数体和TEST宏下方的代码块，组成函数。<!--]--></p><!--[--><div class="v-card v-theme--YorFoger v-card--density-default elevation-0 v-card--variant-outlined" style=""><!----><div class="v-card__loader"><div class="v-progress-linear v-theme--YorFoger v-locale--is-ltr" style="top:0;height:0;--v-progress-linear-height:2px;left:50%;transform:translateX(-50%);" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100"><!----><div class="v-progress-linear__background" style="width:100%;"></div><div class="v-progress-linear__indeterminate"><!--[--><div class="v-progress-linear__indeterminate long" style=""></div><div class="v-progress-linear__indeterminate short" style=""></div><!--]--></div><!----></div></div><!----><!----><!--[--><span class="v-chip v-theme--YorFoger v-chip--density-default v-chip--size-default v-chip--variant-text" style="position:absolute;right:0;top:0;font-family:consolas;" draggable="false"><!--[--><!----><span class="v-chip__underlay"></span><!--]--><!----><!----><div class="v-chip__content">main2.c</div><!----><!----></span><div class="v-container v-locale--is-ltr overflow-x-auto pa-0" style=""><div class="v-card-text" style="display:inline-block;min-width:100%;"><!--[--><pre><code><span class="line" line="1"><span class="ct-212458">#include</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&lt;iostream&gt;
+</span></span><span class="line" line="2"><span class="ct-212458">#include</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&lt;memory&gt;
+</span></span><span class="line" line="3"><span class="ct-212458">#include</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&lt;vector&gt;
+</span></span><span class="line" line="4"><span>
+</span></span><span class="line" line="5"><span class="ct-212458">using</span><span class="ct-730e80"> </span><span class="ct-52c52f">namespace</span><span class="ct-730e80"> </span><span class="ct-a6dbaa">std</span><span class="ct-730e80">;
+</span></span><span class="line" line="6"><span>
+</span></span><span class="line" line="7"><span class="ct-3d0913">/* 基类 */
+</span></span><span class="line" line="8"><span class="ct-52c52f">class</span><span class="ct-730e80"> </span><span class="ct-a6dbaa">test_t</span><span class="ct-730e80"> {
+</span></span><span class="line" line="9"><span class="ct-52c52f">public:
+</span></span><span class="line" line="10"><span class="ct-730e80">    </span><span class="ct-212458">virtual</span><span class="ct-730e80"> </span><span class="ct-09fd12">~test_t</span><span class="ct-730e80">(){};
+</span></span><span class="line" line="11"><span class="ct-730e80">    </span><span class="ct-212458">virtual</span><span class="ct-730e80"> </span><span class="ct-52c52f">void</span><span class="ct-730e80"> </span><span class="ct-09fd12">test_body</span><span class="ct-730e80">(){};
+</span></span><span class="line" line="12"><span>
+</span></span><span class="line" line="13"><span class="ct-3d0913">    /* 初始化子类的静态成员变量时被调用。接收一个子类对象指针，存放到静态成员v_tests。*/
+</span></span><span class="line" line="14"><span class="ct-730e80">    </span><span class="ct-212458">static</span><span class="ct-730e80"> </span><span class="ct-a6dbaa">shared_ptr</span><span class="ct-730e80">&lt;</span><span class="ct-d14fc3">test_t</span><span class="ct-730e80">&gt; </span><span class="ct-09fd12">register_test</span><span class="ct-730e80">(</span><span class="ct-a6dbaa">shared_ptr</span><span class="ct-730e80">&lt;</span><span class="ct-d14fc3">test_t</span><span class="ct-730e80">&gt; </span><span class="ct-ac0022">sp</span><span class="ct-730e80">) {
+</span></span><span class="line" line="15"><span class="ct-730e80">        v_tests.</span><span class="ct-09fd12">push_back</span><span class="ct-730e80">(sp);
+</span></span><span class="line" line="16"><span class="ct-730e80">        </span><span class="ct-212458">return</span><span class="ct-730e80"> sp;
+</span></span><span class="line" line="17"><span class="ct-3d0913">        // return nullptr; // 也可以返回NULL。
+</span></span><span class="line" line="18"><span class="ct-730e80">    }
+</span></span><span class="line" line="19"><span>
+</span></span><span class="line" line="20"><span class="ct-52c52f">public:
+</span></span><span class="line" line="21"><span class="ct-730e80">    </span><span class="ct-212458">static</span><span class="ct-730e80"> vector</span><span class="ct-212458">&lt;</span><span class="ct-730e80">shared_ptr</span><span class="ct-212458">&lt;</span><span class="ct-d14fc3">test_t</span><span class="ct-212458">&gt;&gt;</span><span class="ct-730e80"> v_tests;
+</span></span><span class="line" line="22"><span class="ct-730e80">};
+</span></span><span class="line" line="23"><span class="ct-730e80">vector</span><span class="ct-212458">&lt;</span><span class="ct-730e80">shared_ptr</span><span class="ct-212458">&lt;</span><span class="ct-d14fc3">test_t</span><span class="ct-212458">&gt;&gt;</span><span class="ct-730e80"> </span><span class="ct-d14fc3">test_t</span><span class="ct-730e80">::v_tests </span><span class="ct-212458">=</span><span class="ct-730e80"> </span><span class="ct-09fd12">vector</span><span class="ct-730e80">&lt;</span><span class="ct-a6dbaa">shared_ptr</span><span class="ct-730e80">&lt;</span><span class="ct-d14fc3">test_t</span><span class="ct-730e80">&gt;&gt;();
+</span></span><span class="line" line="24"><span>
+</span></span><span class="line" line="25"><span class="ct-3d0913">/* 子类 */
+</span></span><span class="line" line="26"><span class="ct-212458">#define</span><span class="ct-730e80"> </span><span class="ct-09fd12">GTEST_TEST_CLASS_NAME_</span><span class="ct-730e80">(</span><span class="ct-ac0022">test_suite_name</span><span class="ct-730e80">, </span><span class="ct-ac0022">test_name</span><span class="ct-730e80">) test_suite_name##_##test_name##_Test
+</span></span><span class="line" line="27"><span>
+</span></span><span class="line highlight" line="28"><span class="ct-212458">#define</span><span class="ct-730e80"> </span><span class="ct-09fd12">TEST</span><span class="ct-730e80">(</span><span class="ct-ac0022">suite_name</span><span class="ct-730e80">, </span><span class="ct-ac0022">test_name</span><span class="ct-730e80">)                                                                    \
+</span></span><span class="line highlight" line="29"><span class="ct-730e80">    class GTEST_TEST_CLASS_NAME_(suite_name, test_name) : public test_t {                              \
+</span></span><span class="line highlight" line="30"><span class="ct-730e80">    public:                                                                                            \
+</span></span><span class="line highlight" line="31"><span class="ct-730e80">        ~GTEST_TEST_CLASS_NAME_(suite_name, test_name)() override{};                                   \
+</span></span><span class="line highlight" line="32"><span class="ct-730e80">        virtual void test_body() override;                                                             \
+</span></span><span class="line highlight" line="33"><span class="ct-730e80">                                                                                                       \
+</span></span><span class="line highlight" line="34"><span class="ct-730e80">    public:                                                                                            \
+</span></span><span class="line highlight" line="35"><span class="ct-730e80">        static shared_ptr&lt;test_t&gt; test_info;                                                           \
+</span></span><span class="line highlight" line="36"><span class="ct-730e80">    };                                                                                                 \
+</span></span><span class="line highlight" line="37"><span class="ct-730e80">    shared_ptr&lt;test_t&gt; GTEST_TEST_CLASS_NAME_(suite_name, test_name)::test_info =                      \
+</span></span><span class="line highlight" line="38"><span class="ct-730e80">        test_t::register_test(make_shared&lt;GTEST_TEST_CLASS_NAME_(suite_name, test_name)&gt;());           \
+</span></span><span class="line highlight" line="39"><span class="ct-730e80">    void GTEST_TEST_CLASS_NAME_(suite_name, test_name)::test_body()
+</span></span><span class="line highlight" line="40"><span>
+</span></span><span class="line highlight" line="41"><span class="ct-09fd12">TEST</span><span class="ct-730e80">(suite1, test1) { cout </span><span class="ct-212458">&lt;&lt;</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&quot;test_body of suite1.test1&quot;</span><span class="ct-730e80"> </span><span class="ct-212458">&lt;&lt;</span><span class="ct-730e80"> endl; };
+</span></span><span class="line" line="42"><span>
+</span></span><span class="line" line="43"><span class="ct-52c52f">int</span><span class="ct-730e80"> </span><span class="ct-09fd12">main</span><span class="ct-730e80">() {
+</span></span><span class="line" line="44"><span class="ct-730e80">    </span><span class="ct-212458">for</span><span class="ct-730e80"> (</span><span class="ct-52c52f">int</span><span class="ct-730e80"> i </span><span class="ct-212458">=</span><span class="ct-730e80"> </span><span class="ct-cadfd3">0</span><span class="ct-730e80">; i </span><span class="ct-212458">&lt;</span><span class="ct-730e80"> </span><span class="ct-d14fc3">test_t</span><span class="ct-730e80">::v_tests.</span><span class="ct-09fd12">size</span><span class="ct-730e80">(); i</span><span class="ct-212458">++</span><span class="ct-730e80">) {
+</span></span><span class="line" line="45"><span class="ct-730e80">        </span><span class="ct-52c52f">auto</span><span class="ct-730e80"> test_info </span><span class="ct-212458">=</span><span class="ct-730e80"> </span><span class="ct-d14fc3">test_t</span><span class="ct-730e80">::v_tests[i];
+</span></span><span class="line" line="46"><span class="ct-730e80">        test_info-&gt;</span><span class="ct-09fd12">test_body</span><span class="ct-730e80">();
+</span></span><span class="line" line="47"><span class="ct-730e80">    }
+</span></span><span class="line" line="48"><span class="ct-730e80">}</span></span></code></pre><!--]--></div></div><!----><!--]--><!----><!--[--><!----><span class="v-card__underlay"></span><!--]--></div><!--]--><!--[--><h4 id="cmakeliststxt" class="mt-6 mb-2"><!----><!--[-->CMakeLists.txt<!--]--></h4><!--]--><!--[--><div class="v-card v-theme--YorFoger v-card--density-default elevation-0 v-card--variant-outlined" style=""><!----><div class="v-card__loader"><div class="v-progress-linear v-theme--YorFoger v-locale--is-ltr" style="top:0;height:0;--v-progress-linear-height:2px;left:50%;transform:translateX(-50%);" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100"><!----><div class="v-progress-linear__background" style="width:100%;"></div><div class="v-progress-linear__indeterminate"><!--[--><div class="v-progress-linear__indeterminate long" style=""></div><div class="v-progress-linear__indeterminate short" style=""></div><!--]--></div><!----></div></div><!----><!----><!--[--><span class="v-chip v-theme--YorFoger v-chip--density-default v-chip--size-default v-chip--variant-text" style="position:absolute;right:0;top:0;font-family:consolas;" draggable="false"><!--[--><!----><span class="v-chip__underlay"></span><!--]--><!----><!----><div class="v-chip__content">CMakeLists.txt</div><!----><!----></span><div class="v-container v-locale--is-ltr overflow-x-auto pa-0" style=""><div class="v-card-text" style="display:inline-block;min-width:100%;"><!--[--><pre><code><span class="line" line="1"><span class="ct-212458">cmake_minimum_required</span><span class="ct-730e80">(</span><span class="ct-337bc5">VERSION</span><span class="ct-730e80"> 3.22)
+</span></span><span class="line" line="2"><span class="ct-212458">project</span><span class="ct-730e80">(proj)
+</span></span><span class="line" line="3"><span class="ct-212458">add_executable</span><span class="ct-730e80">(main main.cpp)
+</span></span><span class="line" line="4"><span class="ct-212458">add_executable</span><span class="ct-730e80">(main2 main2.cpp)</span></span></code></pre><!--]--></div></div><!----><!--]--><!----><!--[--><!----><span class="v-card__underlay"></span><!--]--></div><!--]--><h2 id="项目集成googletest" class="mt-8 mb-4"><a href="#项目集成googletest" class="ml-n12 mr-4"><i class="mdi-format-header-2 mdi v-icon notranslate v-theme--YorFoger v-icon--size-small" style="" aria-hidden="true"></i></a><!--[-->项目集成googletest<!--]--></h2><!--[--><h4 id="下载googletest并解压" class="mt-6 mb-2"><!----><!--[-->下载<code class="bg-CodeInline" style="font-family:consolas;font-style:italic;"><!--[-->googletest<!--]--></code>并解压<!--]--></h4><!--]--><p class="my-2"><!--[--><a href="https://github.com/google/googletest/archive/refs/tags/v1.13.0.zip" rel="nofollow"><!--[-->Release v1.13.0 · google/googletest<!--]--></a><!--]--></p><!--[--><h4 id="cmakeliststxt-1" class="mt-6 mb-2"><!----><!--[-->CMakeLists.txt<!--]--></h4><!--]--><p class="my-2"><!--[--><code class="bg-CodeInline" style="font-family:consolas;font-style:italic;"><!--[-->gtest_main<!--]--></code>这个库包含main函数，无需再写main函数。<!--]--></p><!--[--><div class="v-card v-theme--YorFoger v-card--density-default elevation-0 v-card--variant-outlined" style=""><!----><div class="v-card__loader"><div class="v-progress-linear v-theme--YorFoger v-locale--is-ltr" style="top:0;height:0;--v-progress-linear-height:2px;left:50%;transform:translateX(-50%);" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100"><!----><div class="v-progress-linear__background" style="width:100%;"></div><div class="v-progress-linear__indeterminate"><!--[--><div class="v-progress-linear__indeterminate long" style=""></div><div class="v-progress-linear__indeterminate short" style=""></div><!--]--></div><!----></div></div><!----><!----><!--[--><span class="v-chip v-theme--YorFoger v-chip--density-default v-chip--size-default v-chip--variant-text" style="position:absolute;right:0;top:0;font-family:consolas;" draggable="false"><!--[--><!----><span class="v-chip__underlay"></span><!--]--><!----><!----><div class="v-chip__content">CMakeLists.txt</div><!----><!----></span><div class="v-container v-locale--is-ltr overflow-x-auto pa-0" style=""><div class="v-card-text" style="display:inline-block;min-width:100%;"><!--[--><pre><code><span class="line" line="1"><span class="ct-212458">cmake_minimum_required</span><span class="ct-730e80">(</span><span class="ct-337bc5">VERSION</span><span class="ct-730e80"> 3.14)
+</span></span><span class="line" line="2"><span class="ct-212458">project</span><span class="ct-730e80">(my_project)
+</span></span><span class="line" line="3"><span>
+</span></span><span class="line" line="4"><span class="ct-212458">set</span><span class="ct-730e80">(CMAKE_CXX_STANDARD 14)
+</span></span><span class="line" line="5"><span class="ct-212458">set</span><span class="ct-730e80">(CMAKE_CXX_STANDARD_REQUIRED </span><span class="ct-212458">ON</span><span class="ct-730e80">)
+</span></span><span class="line" line="6"><span>
+</span></span><span class="line" line="7"><span class="ct-212458">add_subdirectory</span><span class="ct-730e80">(</span><span class="ct-a2bfdd">&quot;googletest-1.13.0&quot;</span><span class="ct-730e80">)
+</span></span><span class="line" line="8"><span>
+</span></span><span class="line" line="9"><span class="ct-212458">enable_testing</span><span class="ct-730e80">()
+</span></span><span class="line" line="10"><span>
+</span></span><span class="line" line="11"><span class="ct-212458">add_executable</span><span class="ct-730e80">(
+</span></span><span class="line" line="12"><span class="ct-730e80">  hello_test
+</span></span><span class="line" line="13"><span class="ct-730e80">  hello_test.cc
+</span></span><span class="line" line="14"><span class="ct-730e80">)
+</span></span><span class="line" line="15"><span class="ct-212458">target_link_libraries</span><span class="ct-730e80">(
+</span></span><span class="line" line="16"><span class="ct-730e80">  hello_test
+</span></span><span class="line" line="17"><span class="ct-730e80">  GTest::gtest_main
+</span></span><span class="line" line="18"><span class="ct-730e80">)
+</span></span><span class="line" line="19"><span>
+</span></span><span class="line" line="20"><span class="ct-212458">include</span><span class="ct-730e80">(GoogleTest)
+</span></span><span class="line" line="21"><span class="ct-730e80">gtest_discover_tests(hello_test)</span></span></code></pre><!--]--></div></div><!----><!--]--><!----><!--[--><!----><span class="v-card__underlay"></span><!--]--></div><!--]--><!--[--><h4 id="编写测试用例" class="mt-6 mb-2"><!----><!--[-->编写测试用例<!--]--></h4><!--]--><!--[--><div class="v-card v-theme--YorFoger v-card--density-default elevation-0 v-card--variant-outlined" style=""><!----><div class="v-card__loader"><div class="v-progress-linear v-theme--YorFoger v-locale--is-ltr" style="top:0;height:0;--v-progress-linear-height:2px;left:50%;transform:translateX(-50%);" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100"><!----><div class="v-progress-linear__background" style="width:100%;"></div><div class="v-progress-linear__indeterminate"><!--[--><div class="v-progress-linear__indeterminate long" style=""></div><div class="v-progress-linear__indeterminate short" style=""></div><!--]--></div><!----></div></div><!----><!----><!--[--><span class="v-chip v-theme--YorFoger v-chip--density-default v-chip--size-default v-chip--variant-text" style="position:absolute;right:0;top:0;font-family:consolas;" draggable="false"><!--[--><!----><span class="v-chip__underlay"></span><!--]--><!----><!----><div class="v-chip__content">hello_test.cc</div><!----><!----></span><div class="v-container v-locale--is-ltr overflow-x-auto pa-0" style=""><div class="v-card-text" style="display:inline-block;min-width:100%;"><!--[--><pre><code><span class="line" line="1"><span class="ct-212458">#include</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&lt;gtest/gtest.h&gt;
+</span></span><span class="line" line="2"><span>
+</span></span><span class="line" line="3"><span class="ct-3d0913">// Demonstrate some basic assertions.
+</span></span><span class="line" line="4"><span class="ct-09fd12">TEST</span><span class="ct-730e80">(HelloTest, BasicAssertions) {
+</span></span><span class="line" line="5"><span class="ct-3d0913">    // Expect two strings not to be equal.
+</span></span><span class="line" line="6"><span class="ct-730e80">    </span><span class="ct-09fd12">EXPECT_STRNE</span><span class="ct-730e80">(</span><span class="ct-a2bfdd">&quot;hello&quot;</span><span class="ct-730e80">, </span><span class="ct-a2bfdd">&quot;world&quot;</span><span class="ct-730e80">);
+</span></span><span class="line" line="7"><span class="ct-3d0913">    // Expect equality.
+</span></span><span class="line" line="8"><span class="ct-730e80">    </span><span class="ct-09fd12">EXPECT_EQ</span><span class="ct-730e80">(</span><span class="ct-cadfd3">7</span><span class="ct-730e80"> </span><span class="ct-212458">*</span><span class="ct-730e80"> </span><span class="ct-cadfd3">6</span><span class="ct-730e80">, </span><span class="ct-cadfd3">42</span><span class="ct-730e80">) </span><span class="ct-212458">&lt;&lt;</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&quot;not equal&quot;</span><span class="ct-730e80">;
+</span></span><span class="line" line="9"><span class="ct-730e80">}</span></span></code></pre><!--]--></div></div><!----><!--]--><!----><!--[--><!----><span class="v-card__underlay"></span><!--]--></div><!--]--><p class="my-2"><!--[-->阅读<a href="https://google.github.io/googletest/" rel="nofollow"><!--[-->GoogleTest User’s Guide | GoogleTest<!--]--></a>。<!--]--></p><h2 id="项目集成googletest和mockcpp" class="mt-8 mb-4"><a href="#项目集成googletest和mockcpp" class="ml-n12 mr-4"><i class="mdi-format-header-2 mdi v-icon notranslate v-theme--YorFoger v-icon--size-small" style="" aria-hidden="true"></i></a><!--[-->项目集成googletest和mockcpp<!--]--></h2><h3 id="编译mockcpp项目" class="mt-6 mb-2"><a href="#编译mockcpp项目" class="ml-n10 mr-4"><i class="mdi-format-header-3 mdi v-icon notranslate v-theme--YorFoger v-icon--size-small" style="" aria-hidden="true"></i></a><!--[-->编译<code class="bg-CodeInline" style="font-family:consolas;font-style:italic;"><!--[-->mockcpp<!--]--></code>项目<!--]--></h3><!--[--><h4 id="下载mockcpp并解压" class="mt-6 mb-2"><!----><!--[-->下载<code class="bg-CodeInline" style="font-family:consolas;font-style:italic;"><!--[-->mockcpp<!--]--></code>并解压<!--]--></h4><!--]--><p class="my-2"><!--[--><a href="https://github.com/sinojelly/mockcpp/archive/refs/tags/v2.7.zip" rel="nofollow"><!--[-->master-2.7.zip<!--]--></a><!--]--></p><p class="my-2"><!--[-->项目目录如下：<!--]--></p><!--[--><div class="v-card v-theme--YorFoger v-card--density-default elevation-0 v-card--variant-outlined" style=""><!----><div class="v-card__loader"><div class="v-progress-linear v-theme--YorFoger v-locale--is-ltr" style="top:0;height:0;--v-progress-linear-height:2px;left:50%;transform:translateX(-50%);" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100"><!----><div class="v-progress-linear__background" style="width:100%;"></div><div class="v-progress-linear__indeterminate"><!--[--><div class="v-progress-linear__indeterminate long" style=""></div><div class="v-progress-linear__indeterminate short" style=""></div><!--]--></div><!----></div></div><!----><!----><!--[--><span class="v-chip v-theme--YorFoger v-chip--density-default v-chip--size-default v-chip--variant-text" style="position:absolute;right:0;top:0;font-family:consolas;" draggable="false"><!--[--><!----><span class="v-chip__underlay"></span><!--]--><!----><!----><div class="v-chip__content"><!----></div><!----><!----></span><div class="v-container v-locale--is-ltr overflow-x-auto pa-0" style=""><div class="v-card-text" style="display:inline-block;min-width:100%;"><!--[--><pre><code><span class="line" line="1"><span class="ct-d14fc3">.
+</span></span><span class="line" line="2"><span class="ct-85d61d">├──</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">googletest-1.13.0
+</span></span><span class="line" line="3"><span class="ct-85d61d">├──</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">mockcpp-</span><span class="ct-cadfd3">2.7
+</span></span><span class="line" line="4"><span class="ct-85d61d">├──</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">CMakeLists.txt
+</span></span><span class="line" line="5"><span class="ct-85d61d">└──</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">hello_test.cc</span></span></code></pre><!--]--></div></div><!----><!--]--><!----><!--[--><!----><span class="v-card__underlay"></span><!--]--></div><!--]--><!--[--><h4 id="修改文件" class="mt-6 mb-2"><!----><!--[-->修改文件<!--]--></h4><!--]--><ul class="custum-ul my-2"><!--[--><li><!--[-->mockcpp-2.7/build_install.sh<!--]--></li><!--]--></ul><!--[--><div class="v-card v-theme--YorFoger v-card--density-default elevation-0 v-card--variant-outlined" style=""><!----><div class="v-card__loader"><div class="v-progress-linear v-theme--YorFoger v-locale--is-ltr" style="top:0;height:0;--v-progress-linear-height:2px;left:50%;transform:translateX(-50%);" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100"><!----><div class="v-progress-linear__background" style="width:100%;"></div><div class="v-progress-linear__indeterminate"><!--[--><div class="v-progress-linear__indeterminate long" style=""></div><div class="v-progress-linear__indeterminate short" style=""></div><!--]--></div><!----></div></div><!----><!----><!--[--><span class="v-chip v-theme--YorFoger v-chip--density-default v-chip--size-default v-chip--variant-text" style="position:absolute;right:0;top:0;font-family:consolas;" draggable="false"><!--[--><!----><span class="v-chip__underlay"></span><!--]--><!----><!----><div class="v-chip__content">mockcpp-2.7/build_install.sh</div><!----><!----></span><div class="v-container v-locale--is-ltr overflow-x-auto pa-0" style=""><div class="v-card-text" style="display:inline-block;min-width:100%;"><!--[--><pre><code><span class="line" line="1"><span class="ct-3d0913">#!/bin/bash
+</span></span><span class="line" line="2"><span class="ct-3d0913"># build and install
+</span></span><span class="line" line="3"><span>
+</span></span><span class="line" line="4"><span class="ct-3d0913"># $1  --- [optional] compiler name  (default is GNU)
+</span></span><span class="line" line="5"><span class="ct-3d0913"># $2  --- [optional] compiler major version  (The first part of cxx compiler version)
+</span></span><span class="line" line="6"><span>
+</span></span><span class="line" line="7"><span class="ct-3d0913"># fast fail
+</span></span><span class="line" line="8"><span class="ct-d14fc3">set</span><span class="ct-730e80"> </span><span class="ct-cadfd3">-e
+</span></span><span class="line" line="9"><span>
+</span></span><span class="line" line="10"><span class="ct-730e80">cur_dir</span><span class="ct-212458">=</span><span class="ct-a2bfdd">`</span><span class="ct-d14fc3">pwd</span><span class="ct-a2bfdd">`
+</span></span><span class="line" line="11"><span class="ct-3d0913"># Set the install path, should be absolute path
+</span></span><span class="line" line="12"><span class="ct-3d0913"># INSTALL_PATH=~/test_tools/mockcpp_install
+</span></span><span class="line highlight" line="13"><span class="ct-730e80">INSTALL_PATH</span><span class="ct-212458">=</span><span class="ct-730e80">${cur_dir}</span><span class="ct-a2bfdd">/install
+</span></span><span class="line" line="14"><span>
+</span></span><span class="line" line="15"><span class="ct-3d0913"># Set the xxunit test framework name
+</span></span><span class="line" line="16"><span class="ct-3d0913"># XUNIT_NAME=testngpp
+</span></span><span class="line highlight" line="17"><span class="ct-730e80">XUNIT_NAME</span><span class="ct-212458">=</span><span class="ct-a2bfdd">gtest
+</span></span><span class="line" line="18"><span class="ct-3d0913">#XUNIT_NAME=catch2
+</span></span><span class="line" line="19"><span>
+</span></span><span class="line" line="20"><span class="ct-3d0913"># gtest: there is a $XUNIT_HOME/include/gtest/gtest.h
+</span></span><span class="line" line="21"><span class="ct-3d0913"># catch2: there is a $XUNIT_HOME/include/catch2/catch_test_macros.hpp
+</span></span><span class="line" line="22"><span class="ct-3d0913">#XUNIT_HOME=/usr/local
+</span></span><span class="line highlight" line="23"><span class="ct-730e80">XUNIT_HOME</span><span class="ct-212458">=</span><span class="ct-730e80">${cur_dir}</span><span class="ct-a2bfdd">/../googletest-1.13.0/googletest
+</span></span><span class="line" line="24"><span>
+</span></span><span class="line" line="25"><span class="ct-d14fc3">.</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&quot;tools/build_functions.sh&quot;
+</span></span><span class="line" line="26"><span>
+</span></span><span class="line" line="27"><span class="ct-730e80">MY_OS_NAME</span><span class="ct-212458">=</span><span class="ct-a2bfdd">&quot;&quot;
+</span></span><span class="line" line="28"><span class="ct-730e80">MY_CXX_COMPILER_NAME</span><span class="ct-212458">=</span><span class="ct-a2bfdd">&quot;&quot;
+</span></span><span class="line" line="29"><span class="ct-730e80">MY_CXX_COMPILER_MAJOR_VERSION</span><span class="ct-212458">=</span><span class="ct-a2bfdd">&quot;&quot;
+</span></span><span class="line" line="30"><span class="ct-730e80">CMAKE_COMPILER_PARAM</span><span class="ct-212458">=</span><span class="ct-a2bfdd">&quot;&quot;
+</span></span><span class="line" line="31"><span class="ct-730e80">MAKE_BUILD_TYPE</span><span class="ct-212458">=</span><span class="ct-a2bfdd">&quot;&quot;
+</span></span><span class="line" line="32"><span>
+</span></span><span class="line" line="33"><span class="ct-730e80">USER_CHOOSED_COMPILER</span><span class="ct-212458">=</span><span class="ct-a2bfdd">&quot;&quot;
+</span></span><span class="line" line="34"><span class="ct-730e80">USER_CHOOSED_COMPILER_MAJOR_VER</span><span class="ct-212458">=</span><span class="ct-a2bfdd">&quot;&quot;
+</span></span><span class="line" line="35"><span>
+</span></span><span class="line" line="36"><span class="ct-3d0913"># script usage 1: no parameter, use GNU compiler
+</span></span><span class="line" line="37"><span class="ct-730e80">AUTO_COMPILER</span><span class="ct-212458">=</span><span class="ct-a2bfdd">&quot;GNU&quot;
+</span></span><span class="line" line="38"><span class="ct-730e80">AUTO_CXX_VER</span><span class="ct-212458">=</span><span class="ct-a2bfdd">`</span><span class="ct-5cda7a">gcc</span><span class="ct-a2bfdd"> </span><span class="ct-cadfd3">-dumpversion</span><span class="ct-a2bfdd"> </span><span class="ct-212458">|</span><span class="ct-a2bfdd"> </span><span class="ct-5cda7a">awk</span><span class="ct-a2bfdd"> </span><span class="ct-cadfd3">-F.</span><span class="ct-a2bfdd">  &#39;{print $1}&#39;`
+</span></span><span class="line" line="39"><span class="ct-85d61d">InitEnviroment</span><span class="ct-730e80"> $AUTO_COMPILER $AUTO_CXX_VER
+</span></span><span class="line" line="40"><span>
+</span></span><span class="line" line="41"><span class="ct-3d0913"># script usage 2: input the compiler name and major version
+</span></span><span class="line" line="42"><span class="ct-3d0913">#InitEnviroment $1 $2
+</span></span><span class="line" line="43"><span>
+</span></span><span class="line" line="44"><span class="ct-3d0913"># script usage 3: choose the compiler and version
+</span></span><span class="line" line="45"><span class="ct-3d0913">#ReadUserChoice
+</span></span><span class="line" line="46"><span class="ct-3d0913">#InitEnviroment $USER_CHOOSED_COMPILER $USER_CHOOSED_COMPILER_MAJOR_VER
+</span></span><span class="line" line="47"><span>
+</span></span><span class="line" line="48"><span class="ct-730e80">BUILD_DIR</span><span class="ct-212458">=</span><span class="ct-a2bfdd">&quot;build_</span><span class="ct-730e80">$MY_CXX_COMPILER_NAME</span><span class="ct-a2bfdd">&quot;
+</span></span><span class="line" line="49"><span>
+</span></span><span class="line" line="50"><span class="ct-730e80">OS_COMPILER</span><span class="ct-212458">=</span><span class="ct-a2bfdd">&quot;</span><span class="ct-730e80">$MY_OS_NAME</span><span class="ct-a2bfdd">/</span><span class="ct-730e80">$MY_CXX_COMPILER_NAME</span><span class="ct-a2bfdd">/</span><span class="ct-730e80">$MY_CXX_COMPILER_MAJOR_VERSION</span><span class="ct-a2bfdd">&quot;
+</span></span><span class="line" line="51"><span>
+</span></span><span class="line" line="52"><span class="ct-d14fc3">echo</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&quot;OS_COMPILER in Shell : </span><span class="ct-730e80">$OS_COMPILER</span><span class="ct-a2bfdd">&quot;
+</span></span><span class="line" line="53"><span>
+</span></span><span class="line" line="54"><span class="ct-212458">if</span><span class="ct-730e80"> [</span><span class="ct-a2bfdd"> &quot;</span><span class="ct-730e80">$XUNIT_NAME</span><span class="ct-a2bfdd">&quot;</span><span class="ct-730e80"> </span><span class="ct-212458">==</span><span class="ct-a2bfdd"> &quot;testngpp&quot;</span><span class="ct-730e80"> ];</span><span class="ct-212458">then
+</span></span><span class="line" line="55"><span class="ct-85d61d">cmake</span><span class="ct-730e80">  </span><span class="ct-cadfd3">-S</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">.</span><span class="ct-730e80"> </span><span class="ct-cadfd3">-B</span><span class="ct-730e80"> $BUILD_DIR</span><span class="ct-a2bfdd">/mockcpp-install4</span><span class="ct-730e80">$XUNIT_NAME </span><span class="ct-cadfd3">-DCMAKE_INSTALL_PREFIX=</span><span class="ct-730e80">$INSTALL_PATH
+</span></span><span class="line" line="56"><span class="ct-212458">else
+</span></span><span class="line" line="57"><span class="ct-85d61d">cmake</span><span class="ct-730e80">  </span><span class="ct-cadfd3">-S</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">.</span><span class="ct-730e80"> </span><span class="ct-cadfd3">-B</span><span class="ct-730e80"> $BUILD_DIR</span><span class="ct-a2bfdd">/mockcpp-install4</span><span class="ct-730e80">$XUNIT_NAME </span><span class="ct-cadfd3">-DCMAKE_INSTALL_PREFIX=</span><span class="ct-730e80">$INSTALL_PATH</span><span class="ct-730e80"> </span><span class="ct-cadfd3">-DMOCKCPP_XUNIT=</span><span class="ct-730e80">$XUNIT_NAME</span><span class="ct-730e80"> </span><span class="ct-cadfd3">-DMOCKCPP_XUNIT_HOME=</span><span class="ct-730e80">$XUNIT_HOME
+</span></span><span class="line" line="58"><span class="ct-212458">fi
+</span></span><span class="line" line="59"><span>
+</span></span><span class="line" line="60"><span class="ct-85d61d">CompileProjectInstall</span><span class="ct-730e80"> $MY_CXX_COMPILER_NAME $BUILD_DIR</span><span class="ct-a2bfdd">/mockcpp-install4</span><span class="ct-730e80">$XUNIT_NAME</span></span></code></pre><!--]--></div></div><!----><!--]--><!----><!--[--><!----><span class="v-card__underlay"></span><!--]--></div><!--]--><ul class="custum-ul my-2"><!--[--><li><!--[-->mockcpp-2.7/CMakeLists.txt<!--]--></li><!--]--></ul><!--[--><div class="v-card v-theme--YorFoger v-card--density-default elevation-0 v-card--variant-outlined" style=""><!----><div class="v-card__loader"><div class="v-progress-linear v-theme--YorFoger v-locale--is-ltr" style="top:0;height:0;--v-progress-linear-height:2px;left:50%;transform:translateX(-50%);" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100"><!----><div class="v-progress-linear__background" style="width:100%;"></div><div class="v-progress-linear__indeterminate"><!--[--><div class="v-progress-linear__indeterminate long" style=""></div><div class="v-progress-linear__indeterminate short" style=""></div><!--]--></div><!----></div></div><!----><!----><!--[--><span class="v-chip v-theme--YorFoger v-chip--density-default v-chip--size-default v-chip--variant-text" style="position:absolute;right:0;top:0;font-family:consolas;" draggable="false"><!--[--><!----><span class="v-chip__underlay"></span><!--]--><!----><!----><div class="v-chip__content">mockcpp-2.7/CMakeLists.txt</div><!----><!----></span><div class="v-container v-locale--is-ltr overflow-x-auto pa-0" style=""><div class="v-card-text" style="display:inline-block;min-width:100%;"><!--[--><pre><code><span class="line" line="1"><span class="ct-212458">CMAKE_MINIMUM_REQUIRED</span><span class="ct-730e80">(</span><span class="ct-337bc5">VERSION</span><span class="ct-730e80"> 3.12...3.19)
+</span></span><span class="line" line="2"><span>
+</span></span><span class="line" line="3"><span class="ct-212458">PROJECT</span><span class="ct-730e80">(mockcpp)
+</span></span><span class="line" line="4"><span>
+</span></span><span class="line" line="5"><span class="ct-212458">INCLUDE</span><span class="ct-730e80">(ProjectVar.txt)
+</span></span><span class="line" line="6"><span>
+</span></span><span class="line highlight" line="7"><span class="ct-212458">SET</span><span class="ct-730e80">(CMAKE_CXX_STANDARD 14)
+</span></span><span class="line" line="8"><span>
+</span></span><span class="line" line="9"><span class="ct-212458">ADD_SUBDIRECTORY</span><span class="ct-730e80">(src)
+</span></span><span class="line" line="10"><span>
+</span></span><span class="line" line="11"><span class="ct-212458">INSTALL</span><span class="ct-730e80">(DIRECTORY include/mockcpp DESTINATION include
+</span></span><span class="line" line="12"><span class="ct-730e80">        PATTERN </span><span class="ct-a2bfdd">&quot;.svn&quot;</span><span class="ct-730e80"> EXCLUDE)
+</span></span><span class="line" line="13"><span>
+</span></span><span class="line" line="14"><span class="ct-212458">INSTALL</span><span class="ct-730e80">(DIRECTORY 3rdparty/fake_boost DESTINATION include
+</span></span><span class="line" line="15"><span class="ct-730e80">        PATTERN </span><span class="ct-a2bfdd">&quot;.svn&quot;</span><span class="ct-730e80"> EXCLUDE)
+</span></span><span class="line" line="16"><span>
+</span></span><span class="line" line="17"><span class="ct-212458">INSTALL</span><span class="ct-730e80">(DIRECTORY 3rdparty/msinttypes DESTINATION include
+</span></span><span class="line" line="18"><span class="ct-730e80">        PATTERN </span><span class="ct-a2bfdd">&quot;.svn&quot;</span><span class="ct-730e80"> EXCLUDE)
+</span></span><span class="line" line="19"><span>
+</span></span><span class="line" line="20"><span class="ct-212458">SET</span><span class="ct-730e80">(MOCKCPP_XUNIT </span><span class="ct-a2bfdd">&quot;testngpp&quot;</span><span class="ct-730e80"> </span><span class="ct-212458">CACHE</span><span class="ct-730e80"> </span><span class="ct-212458">STRING</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&quot;Set to gtest/cpputest/cppunit to use other testframeworks.&quot;</span><span class="ct-730e80">)</span></span></code></pre><!--]--></div></div><!----><!--]--><!----><!--[--><!----><span class="v-card__underlay"></span><!--]--></div><!--]--><!--[--><h4 id="编译mockcpp" class="mt-6 mb-2"><!----><!--[-->编译<code class="bg-CodeInline" style="font-family:consolas;font-style:italic;"><!--[-->mockcpp<!--]--></code><!--]--></h4><!--]--><!--[--><div class="v-card v-theme--YorFoger v-card--density-default elevation-0 v-card--variant-outlined" style=""><!----><div class="v-card__loader"><div class="v-progress-linear v-theme--YorFoger v-locale--is-ltr" style="top:0;height:0;--v-progress-linear-height:2px;left:50%;transform:translateX(-50%);" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100"><!----><div class="v-progress-linear__background" style="width:100%;"></div><div class="v-progress-linear__indeterminate"><!--[--><div class="v-progress-linear__indeterminate long" style=""></div><div class="v-progress-linear__indeterminate short" style=""></div><!--]--></div><!----></div></div><!----><!----><!--[--><span class="v-chip v-theme--YorFoger v-chip--density-default v-chip--size-default v-chip--variant-text" style="position:absolute;right:0;top:0;font-family:consolas;" draggable="false"><!--[--><!----><span class="v-chip__underlay"></span><!--]--><!----><!----><div class="v-chip__content">terminal</div><!----><!----></span><div class="v-container v-locale--is-ltr overflow-x-auto pa-0" style=""><div class="v-card-text" style="display:inline-block;min-width:100%;"><!--[--><pre><code><span class="line" line="1"><span class="ct-d14fc3">cd</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">mockcpp-</span><span class="ct-cadfd3">2.7
+</span></span><span class="line" line="2"><span class="ct-d14fc3">.</span><span class="ct-85d61d">/build_install.sh</span></span></code></pre><!--]--></div></div><!----><!--]--><!----><!--[--><!----><span class="v-card__underlay"></span><!--]--></div><!--]--><h3 id="编译项目" class="mt-6 mb-2"><a href="#编译项目" class="ml-n10 mr-4"><i class="mdi-format-header-3 mdi v-icon notranslate v-theme--YorFoger v-icon--size-small" style="" aria-hidden="true"></i></a><!--[-->编译项目<!--]--></h3><!--[--><h4 id="cmakeliststxt-2" class="mt-6 mb-2"><!----><!--[-->CMakeLists.txt<!--]--></h4><!--]--><!--[--><div class="v-card v-theme--YorFoger v-card--density-default elevation-0 v-card--variant-outlined" style=""><!----><div class="v-card__loader"><div class="v-progress-linear v-theme--YorFoger v-locale--is-ltr" style="top:0;height:0;--v-progress-linear-height:2px;left:50%;transform:translateX(-50%);" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100"><!----><div class="v-progress-linear__background" style="width:100%;"></div><div class="v-progress-linear__indeterminate"><!--[--><div class="v-progress-linear__indeterminate long" style=""></div><div class="v-progress-linear__indeterminate short" style=""></div><!--]--></div><!----></div></div><!----><!----><!--[--><span class="v-chip v-theme--YorFoger v-chip--density-default v-chip--size-default v-chip--variant-text" style="position:absolute;right:0;top:0;font-family:consolas;" draggable="false"><!--[--><!----><span class="v-chip__underlay"></span><!--]--><!----><!----><div class="v-chip__content">CMakeLists.txt</div><!----><!----></span><div class="v-container v-locale--is-ltr overflow-x-auto pa-0" style=""><div class="v-card-text" style="display:inline-block;min-width:100%;"><!--[--><pre><code><span class="line" line="1"><span class="ct-212458">cmake_minimum_required</span><span class="ct-730e80">(</span><span class="ct-337bc5">VERSION</span><span class="ct-730e80"> 3.14)
+</span></span><span class="line" line="2"><span class="ct-212458">project</span><span class="ct-730e80">(my_project)
+</span></span><span class="line" line="3"><span>
+</span></span><span class="line" line="4"><span class="ct-212458">set</span><span class="ct-730e80">(CMAKE_CXX_STANDARD 14)
+</span></span><span class="line" line="5"><span class="ct-212458">set</span><span class="ct-730e80">(CMAKE_CXX_STANDARD_REQUIRED </span><span class="ct-212458">ON</span><span class="ct-730e80">)
+</span></span><span class="line" line="6"><span>
+</span></span><span class="line" line="7"><span class="ct-212458">add_subdirectory</span><span class="ct-730e80">(</span><span class="ct-a2bfdd">&quot;googletest-1.13.0&quot;</span><span class="ct-730e80">)
+</span></span><span class="line" line="8"><span>
+</span></span><span class="line" line="9"><span class="ct-212458">enable_testing</span><span class="ct-730e80">()
+</span></span><span class="line" line="10"><span>
+</span></span><span class="line" line="11"><span class="ct-212458">add_executable</span><span class="ct-730e80">(
+</span></span><span class="line" line="12"><span class="ct-730e80">  hello_test
+</span></span><span class="line" line="13"><span class="ct-730e80">  hello_test.cc
+</span></span><span class="line" line="14"><span class="ct-730e80">)
+</span></span><span class="line" line="15"><span>
+</span></span><span class="line highlight" line="16"><span class="ct-212458">target_include_directories</span><span class="ct-730e80">(hello_test </span><span class="ct-337bc5">PUBLIC</span><span class="ct-730e80"> </span><span class="ct-212458">${PROJECT_SOURCE_DIR}</span><span class="ct-730e80">/mockcpp-2.7/install/include)
+</span></span><span class="line" line="17"><span>
+</span></span><span class="line" line="18"><span class="ct-212458">target_link_libraries</span><span class="ct-730e80">(
+</span></span><span class="line" line="19"><span class="ct-730e80">  hello_test
+</span></span><span class="line" line="20"><span class="ct-730e80">  GTest::gtest_main
+</span></span><span class="line highlight" line="21"><span class="ct-730e80">  </span><span class="ct-212458">${PROJECT_SOURCE_DIR}</span><span class="ct-730e80">/mockcpp-2.7/install/lib/libmockcpp.a
+</span></span><span class="line" line="22"><span class="ct-730e80">)
+</span></span><span class="line" line="23"><span>
+</span></span><span class="line" line="24"><span class="ct-212458">include</span><span class="ct-730e80">(GoogleTest)
+</span></span><span class="line" line="25"><span class="ct-730e80">gtest_discover_tests(hello_test)</span></span></code></pre><!--]--></div></div><!----><!--]--><!----><!--[--><!----><span class="v-card__underlay"></span><!--]--></div><!--]--><!--[--><h4 id="编写测试用例-1" class="mt-6 mb-2"><!----><!--[-->编写测试用例<!--]--></h4><!--]--><p class="my-2"><!--[-->当执行到add函数时，将执行add2函数。<!--]--></p><!--[--><div class="v-card v-theme--YorFoger v-card--density-default elevation-0 v-card--variant-outlined" style=""><!----><div class="v-card__loader"><div class="v-progress-linear v-theme--YorFoger v-locale--is-ltr" style="top:0;height:0;--v-progress-linear-height:2px;left:50%;transform:translateX(-50%);" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100"><!----><div class="v-progress-linear__background" style="width:100%;"></div><div class="v-progress-linear__indeterminate"><!--[--><div class="v-progress-linear__indeterminate long" style=""></div><div class="v-progress-linear__indeterminate short" style=""></div><!--]--></div><!----></div></div><!----><!----><!--[--><span class="v-chip v-theme--YorFoger v-chip--density-default v-chip--size-default v-chip--variant-text" style="position:absolute;right:0;top:0;font-family:consolas;" draggable="false"><!--[--><!----><span class="v-chip__underlay"></span><!--]--><!----><!----><div class="v-chip__content">hello_test.cc</div><!----><!----></span><div class="v-container v-locale--is-ltr overflow-x-auto pa-0" style=""><div class="v-card-text" style="display:inline-block;min-width:100%;"><!--[--><pre><code><span class="line" line="1"><span class="ct-212458">#include</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&lt;gtest/gtest.h&gt;
+</span></span><span class="line" line="2"><span class="ct-212458">#include</span><span class="ct-730e80"> </span><span class="ct-a2bfdd">&lt;mockcpp/mokc.h&gt;
+</span></span><span class="line" line="3"><span>
+</span></span><span class="line" line="4"><span class="ct-52c52f">int</span><span class="ct-730e80"> </span><span class="ct-09fd12">add</span><span class="ct-730e80">(</span><span class="ct-52c52f">int</span><span class="ct-730e80"> </span><span class="ct-ac0022">x</span><span class="ct-730e80">, </span><span class="ct-52c52f">int</span><span class="ct-730e80"> </span><span class="ct-ac0022">y</span><span class="ct-730e80">) { </span><span class="ct-212458">return</span><span class="ct-730e80"> x </span><span class="ct-212458">+</span><span class="ct-730e80"> y; }
+</span></span><span class="line" line="5"><span>
+</span></span><span class="line" line="6"><span class="ct-52c52f">int</span><span class="ct-730e80"> </span><span class="ct-09fd12">add2</span><span class="ct-730e80">(</span><span class="ct-52c52f">int</span><span class="ct-730e80"> </span><span class="ct-ac0022">x</span><span class="ct-730e80">, </span><span class="ct-52c52f">int</span><span class="ct-730e80"> </span><span class="ct-ac0022">y</span><span class="ct-730e80">) { </span><span class="ct-212458">return</span><span class="ct-730e80"> (x </span><span class="ct-212458">+</span><span class="ct-730e80"> y) </span><span class="ct-212458">*</span><span class="ct-730e80"> </span><span class="ct-cadfd3">2</span><span class="ct-730e80">; }
+</span></span><span class="line" line="7"><span>
+</span></span><span class="line" line="8"><span class="ct-09fd12">TEST</span><span class="ct-730e80">(HelloTest, BasicAssertions2) {
+</span></span><span class="line highlight" line="9"><span class="ct-730e80">    </span><span class="ct-09fd12">MOCKER</span><span class="ct-730e80">(add).</span><span class="ct-09fd12">stubs</span><span class="ct-730e80">().</span><span class="ct-09fd12">will</span><span class="ct-730e80">(</span><span class="ct-09fd12">invoke</span><span class="ct-730e80">(add2));
+</span></span><span class="line" line="10"><span class="ct-730e80">    </span><span class="ct-09fd12">EXPECT_EQ</span><span class="ct-730e80">(</span><span class="ct-09fd12">add</span><span class="ct-730e80">(</span><span class="ct-cadfd3">5</span><span class="ct-730e80">, </span><span class="ct-cadfd3">6</span><span class="ct-730e80">), </span><span class="ct-cadfd3">11</span><span class="ct-730e80">);
+</span></span><span class="line" line="11"><span class="ct-730e80">    </span><span class="ct-09fd12">EXPECT_EQ</span><span class="ct-730e80">(</span><span class="ct-09fd12">add</span><span class="ct-730e80">(</span><span class="ct-cadfd3">5</span><span class="ct-730e80">, </span><span class="ct-cadfd3">6</span><span class="ct-730e80">), </span><span class="ct-cadfd3">22</span><span class="ct-730e80">);
+</span></span><span class="line" line="12"><span class="ct-730e80">}</span></span></code></pre><!--]--></div></div><!----><!--]--><!----><!--[--><!----><span class="v-card__underlay"></span><!--]--></div><!--]--><p class="my-2"><!--[-->阅读：<!--]--></p><ul class="custum-ul my-2"><!--[--><li><!--[--><a href="https://github.com/sinojelly/mockcpp/blob/master/docs/ChineseVersionManual.md" rel="nofollow"><!--[-->mockcpp/docs/ChineseVersionManual.md at master · sinojelly/mockcpp · GitHub<!--]--></a><!--]--></li><li><!--[--><a href="https://github.com/sinojelly/mockcpp" rel="nofollow"><!--[-->sinojelly/mockcpp: Two C/C++ testing tools, mockcpp and testngpp.<!--]--></a>。<!--]--></li><!--]--></ul><style>.ct-337bc5{color:#0550AE}
+.ct-5cda7a{color:#953800}
+.ct-85d61d{color:#953800}
+.ct-cadfd3{color:#0550AE}
+.ct-ac0022{color:#953800}
+.ct-d14fc3{color:#0550AE}
+.ct-09fd12{color:#8250DF}
+.ct-3d0913{color:#6E7781}
+.ct-a6dbaa{color:#953800}
+.ct-52c52f{color:#CF222E}
+.ct-a2bfdd{color:#0A3069}
+.ct-730e80{color:#24292F}
+.ct-212458{color:#CF222E}
+.dark .ct-212458{color:#FF7B72}
+.sepia .ct-212458{color:#F92672}
+.dark .ct-730e80{color:#C9D1D9}
+.sepia .ct-730e80{color:#F8F8F2}
+.dark .ct-a2bfdd{color:#A5D6FF}
+.sepia .ct-a2bfdd{color:#E6DB74}
+.dark .ct-52c52f{color:#FF7B72}
+.sepia .ct-52c52f{color:#66D9EF}
+.dark .ct-a6dbaa{color:#FFA657}
+.sepia .ct-a6dbaa{color:#A6E22E}
+.dark .ct-3d0913{color:#8B949E}
+.sepia .ct-3d0913{color:#88846F}
+.dark .ct-09fd12{color:#D2A8FF}
+.sepia .ct-09fd12{color:#A6E22E}
+.dark .ct-d14fc3{color:#79C0FF}
+.sepia .ct-d14fc3{color:#66D9EF}
+.dark .ct-ac0022{color:#FFA657}
+.sepia .ct-ac0022{color:#FD971F}
+.dark .ct-cadfd3{color:#79C0FF}
+.sepia .ct-cadfd3{color:#AE81FF}
+.dark .ct-85d61d{color:#FFA657}
+.sepia .ct-85d61d{color:#F8F8F2}
+.dark .ct-5cda7a{color:#FFA657}
+.sepia .ct-5cda7a{color:#E6DB74}
+.dark .ct-337bc5{color:#79C0FF}
+.sepia .ct-337bc5{color:#F8F8F2}</style></div><!--]--><!--]--><!--]--><!----><!--[--><!----><span class="v-card__underlay"></span><!--]--></div></div><!--]--></main><footer class="v-footer v-theme--YorFoger bg-grey-lighten-1 d-flex flex-column" style=""><div class="v-row v-row--no-gutters justify-center" style=""><!--[--><button type="button" class="v-btn v-theme--YorFoger text-white v-btn--density-default rounded-xl v-btn--size-default v-btn--variant-text mx-2" style=""><!--[--><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span><!--]--><!----><span class="v-btn__content" data-no-activator><!--[--><!--[-->Home<!--]--><!--]--></span><!----><!----></button><button type="button" class="v-btn v-theme--YorFoger text-white v-btn--density-default rounded-xl v-btn--size-default v-btn--variant-text mx-2" style=""><!--[--><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span><!--]--><!----><span class="v-btn__content" data-no-activator><!--[--><!--[-->About Us<!--]--><!--]--></span><!----><!----></button><button type="button" class="v-btn v-theme--YorFoger text-white v-btn--density-default rounded-xl v-btn--size-default v-btn--variant-text mx-2" style=""><!--[--><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span><!--]--><!----><span class="v-btn__content" data-no-activator><!--[--><!--[-->Team<!--]--><!--]--></span><!----><!----></button><button type="button" class="v-btn v-theme--YorFoger text-white v-btn--density-default rounded-xl v-btn--size-default v-btn--variant-text mx-2" style=""><!--[--><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span><!--]--><!----><span class="v-btn__content" data-no-activator><!--[--><!--[-->Services<!--]--><!--]--></span><!----><!----></button><button type="button" class="v-btn v-theme--YorFoger text-white v-btn--density-default rounded-xl v-btn--size-default v-btn--variant-text mx-2" style=""><!--[--><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span><!--]--><!----><span class="v-btn__content" data-no-activator><!--[--><!--[-->Blog<!--]--><!--]--></span><!----><!----></button><button type="button" class="v-btn v-theme--YorFoger text-white v-btn--density-default rounded-xl v-btn--size-default v-btn--variant-text mx-2" style=""><!--[--><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span><!--]--><!----><span class="v-btn__content" data-no-activator><!--[--><!--[-->Contact Us<!--]--><!--]--></span><!----><!----></button><!--]--><div class="v-col v-col-12 text-center mt-4" style="">2023 — <strong>Vuetify</strong></div></div></footer><!--]--></div></div></div><script type="application/json" id="__NUXT_DATA__" data-ssr="true" data-src="/blog/c++/googletest-mockcpp/googletest/_payload.json">[{"state":1,"_errors":3,"serverRendered":6,"prerenderedAt":7},["Reactive",2],{},["Reactive",4],{"content-query-X9fcp1p8fL":5},null,true,1687100537960]</script><script>window.__NUXT__={};window.__NUXT__.config={public:{content:{locales:[],defaultLocale:"",integrity:1687100463860,experimental:{stripQueryParameters:false,clientDB:false,advancedIgnoresPattern:false},api:{baseURL:"/api/_content"},navigation:{fields:[]},tags:{p:"prose-p",a:"prose-a",blockquote:"prose-blockquote","code-inline":"prose-code-inline",code:"prose-code",em:"prose-em",h1:"prose-h1",h2:"prose-h2",h3:"prose-h3",h4:"prose-h4",h5:"prose-h5",h6:"prose-h6",hr:"prose-hr",img:"prose-img",ul:"prose-ul",ol:"prose-ol",li:"prose-li",strong:"prose-strong",table:"prose-table",thead:"prose-thead",tbody:"prose-tbody",td:"prose-td",th:"prose-th",tr:"prose-tr"},highlight:{theme:{default:"github-light",dark:"github-dark",sepia:"monokai"},preload:["c","cpp","java","js","json","ts","vue"]},wsUrl:"",documentDriven:false,host:"",trailingSlash:false,anchorLinks:{depth:4,exclude:[1]}}},app:{baseURL:"/blog/",buildAssetsDir:"/_nuxt/",cdnURL:""}}</script><script type="module" src="/blog/_nuxt/entry.e553207c.js" crossorigin></script></body>
+</html>

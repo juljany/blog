@@ -1,1 +1,0 @@
-import{b as s,o as t,i as o,h as _}from"./entry.2a6126ff.js";const c={},n={class:"custum-ul my-2"};function r(e,l){return t(),o("ul",n,[_(e.$slots,"default")])}const u=s(c,[["render",r]]);export{u as default};
