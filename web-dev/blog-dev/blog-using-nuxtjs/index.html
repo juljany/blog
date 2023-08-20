@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html >
+<head><meta charset="utf-8">
+<title>搭建静态博客(1)：快速搭建静态博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="搭建静态博客(1)：快速搭建静态博客">
+<meta name="description" content="一个博客，最重要的是其中含有的内容。所以，搭建博客，最重要的是快速搭建起一个能够展示内容的博客雏形，网页样式可以慢慢做。千万别样式做了几个月，博客一篇没写。这一篇博客展示使用NuxtJs快速搭建博客雏形，并发布托管博客到Github。">
+<meta property="og:description" content="一个博客，最重要的是其中含有的内容。所以，搭建博客，最重要的是快速搭建起一个能够展示内容的博客雏形，网页样式可以慢慢做。千万别样式做了几个月，博客一篇没写。这一篇博客展示使用NuxtJs快速搭建博客雏形，并发布托管博客到Github。"><link rel="preload" as="fetch" crossorigin="anonymous" href="/blog/web-dev/blog-dev/blog-using-nuxtjs/_payload.json"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/entry.037bd558.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/_...slug_.f7eaaf49.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ContentDoc.3833c3f6.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ContentRenderer.421aa9f2.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ContentRendererMarkdown.19c05743.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/index.a6ef77ff.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/preview.9393d465.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ContentQuery.5724dc1f.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/query.4c9cac8e.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/utils.3376a703.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseH2.40f80ecf.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseP.fd6ec4b0.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseA.adf225d7.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/nuxt-link.6aad8cab.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseH3.5859d46c.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseH5.33b8f1ca.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseCode.cef3feb6.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseCodeInline.d95323c8.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseImg.3028f49c.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseUl.3ade314b.js"><link rel="modulepreload" as="script" crossorigin href="/blog/_nuxt/ProseLi.ca0324d4.js"><link rel="prefetch" as="script" crossorigin href="/blog/_nuxt/error-404.31c724b8.js"><link rel="prefetch" as="script" crossorigin href="/blog/_nuxt/error-500.5c979ed0.js"><style>pre code .line{display:block;font-family:Courier New,Courier,monospace;min-height:1rem}pre{border:1px solid #3e5f6d;padding:1rem}.highlight{background-color:#add8e6}</style><style>img{max-height:25vh}</style></head>
+<body ><div id="__nuxt"><main><!--[--><div><h2 id="创建nuxtjs项目"><a href="#创建nuxtjs项目"><!--[-->创建NuxtJs项目<!--]--></a></h2><p><!--[-->示例代码：<a href="http://example.org" rel="nofollow"><!--[-->example.org<!--]--></a><!--]--></p><h3 id="准备开发环境"><a href="#准备开发环境"><!--[-->准备开发环境<!--]--></a></h3><h5 id="拉取docker镜像"><!--[-->拉取Docker镜像<!--]--></h5><p><!--[-->如果速度较慢，可先设置镜像源，然后拉取，见文末。<!--]--></p><!--[--><pre><code><span class="line" line="1"><span class="ct-118306">docker</span><span class="ct-248813"> </span><span class="ct-088893">pull</span><span class="ct-248813"> </span><span class="ct-088893">node:20.3.0-bullsey</span></span></code></pre><!--]--><h5 id="创建目录"><!--[-->创建目录<!--]--></h5><p><!--[-->创建容器前先创建几个文件夹，作用是将源码和数据分开，便于管理，避免发布项目源码时，误将博客内容发布出去。<!--]--></p><!--[--><pre><code><span class="line" line="1"><span>C:\&lt;path&gt;\Blog
+</span></span><span class="line" line="2"><span>├── BlogContent
+</span></span><span class="line" line="3"><span>│   ├── images-blog     博客图片
+</span></span><span class="line" line="4"><span>│   └── content         博客Markdown文件
+</span></span><span class="line" line="5"><span>├── BlogProject         博客源码
+</span></span><span class="line" line="6"><span>└── BlogStaticOutput    生成的博客静态网页，上传到Github</span></span></code></pre><!--]--><h5 id="创建容器"><!--[-->创建容器<!--]--></h5><!--[--><pre><code><span class="line" line="1"><span class="ct-118306">docker</span><span class="ct-248813"> </span><span class="ct-088893">run</span><span class="ct-248813"> </span><span class="ct-390898">-dt</span><span class="ct-248813"> </span><span class="ct-390898">--privileged</span><span class="ct-248813"> </span><span class="ct-390898">--gpus</span><span class="ct-248813"> </span><span class="ct-088893">all</span><span class="ct-248813"> </span><span class="ct-088893">^
+</span></span><span class="line" line="2"><span class="ct-118306">--name</span><span class="ct-248813"> </span><span class="ct-088893">blog-dev</span><span class="ct-248813"> </span><span class="ct-088893">^
+</span></span><span class="line" line="3"><span class="ct-118306">-v</span><span class="ct-248813"> </span><span class="ct-088893">C:</span><span class="ct-390898">\&lt;</span><span class="ct-088893">pat</span><span class="ct-248813">h</span><span class="ct-257789">&gt;</span><span class="ct-390898">\B</span><span class="ct-088893">log:/Blog/</span><span class="ct-248813"> </span><span class="ct-088893">^
+</span></span><span class="line" line="4"><span class="ct-118306">node:20.3.0-bullseye</span></span></code></pre><!--]--><h5 id="在容器中执行下面的命令"><!--[-->在容器中执行下面的命令<!--]--></h5><!--[--><pre><code><span class="line" line="1"><span class="ct-667353">cd</span><span class="ct-248813"> </span><span class="ct-088893">/Blog/BlogProject
+</span></span><span class="line" line="2"><span class="ct-118306">ln</span><span class="ct-248813"> </span><span class="ct-088893">/Blog/BlogContent/content/</span><span class="ct-248813"> </span><span class="ct-390898">-s
+</span></span><span class="line" line="3"><span class="ct-667353">cd</span><span class="ct-248813"> </span><span class="ct-088893">public/
+</span></span><span class="line" line="4"><span class="ct-118306">ln</span><span class="ct-248813"> </span><span class="ct-088893">/Blog/BlogContent/images-blog/</span><span class="ct-248813"> </span><span class="ct-390898">-s</span></span></code></pre><!--]--><h3 id="创建nuxtjs项目安装依赖添加少许样式"><a href="#创建nuxtjs项目安装依赖添加少许样式"><!--[-->创建NuxtJs项目、安装依赖、添加少许样式<!--]--></a></h3><h5 id="创建nuxtjs项目安装依赖"><!--[-->创建NuxtJs项目，安装依赖<!--]--></h5><!--[--><pre><code><span class="line" line="1"><span class="ct-667353">cd</span><span class="ct-248813"> </span><span class="ct-088893">/Blog/BlogProject
+</span></span><span class="line" line="2"><span class="ct-118306">npx</span><span class="ct-248813"> </span><span class="ct-088893">nuxi</span><span class="ct-248813"> </span><span class="ct-088893">init</span><span class="ct-248813"> </span><span class="ct-088893">.</span><span class="ct-248813">         </span><span class="ct-080019"># 初始化nuxt项目
+</span></span><span class="line" line="3"><span class="ct-118306">npm</span><span class="ct-248813"> </span><span class="ct-088893">install</span><span class="ct-248813"> </span><span class="ct-390898">--save-dev</span><span class="ct-248813">  </span><span class="ct-080019"># 安装依赖包
+</span></span><span class="line" line="4"><span class="ct-118306">npm</span><span class="ct-248813"> </span><span class="ct-088893">install</span><span class="ct-248813"> </span><span class="ct-390898">--save-dev</span><span class="ct-248813"> </span><span class="ct-088893">@nuxt/content</span><span class="ct-248813">  </span><span class="ct-080019"># 安装@nuxt/content，用于解析markdown文件</span></span></code></pre><!--]--><h5 id="增加目录页"><!--[-->增加目录页<!--]--></h5><p><!--[-->新增<code><!--[-->pages/index.vue<!--]--></code>文件，该文件为博客目录页，<code><!--[-->ContentNavigation<!--]--></code>组件由NuxtJs提供，<code><!--[-->navigation<!--]--></code>含有目录信息。注意，这个项目的content目录含有两层子目录，即博客存放的目录类似于<code><!--[-->/Blog/BlogProject/content/0.categoryA/0.categoryB/1.Hello.md<!--]--></code>。<!--]--></p><!--[--><pre><code><span class="line" line="1"><span class="ct-248813">&lt;</span><span class="ct-915666">template</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="2"><span class="ct-248813">    &lt;</span><span class="ct-915666">div</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="3"><span class="ct-248813">        &lt;</span><span class="ct-281012">ContentNavigation</span><span class="ct-248813"> </span><span class="ct-118306">v-slot</span><span class="ct-248813">=</span><span class="ct-088893">&quot;{ navigation }&quot;</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="4"><span class="ct-248813">            </span><span class="ct-080019">&lt;!-- blog category level 1 --&gt;
+</span></span><span class="line" line="5"><span class="ct-248813">            &lt;</span><span class="ct-915666">ul</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="6"><span class="ct-248813">                &lt;</span><span class="ct-915666">li</span><span class="ct-248813"> </span><span class="ct-118306">v-for</span><span class="ct-248813">=</span><span class="ct-088893">&quot;blog_category_l1 of navigation&quot;</span><span class="ct-248813"> </span><span class="ct-118306">:key</span><span class="ct-248813">=</span><span class="ct-088893">&quot;blog_category_l1._path&quot;</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="7"><span class="ct-248813">                    &lt;</span><span class="ct-915666">p</span><span class="ct-248813">&gt; {{ blog_category_l1.title }} &lt;/</span><span class="ct-915666">p</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="8"><span>
+</span></span><span class="line" line="9"><span class="ct-248813">                    </span><span class="ct-080019">&lt;!-- blog category level 2 --&gt;
+</span></span><span class="line" line="10"><span class="ct-248813">                    &lt;</span><span class="ct-915666">ul</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="11"><span class="ct-248813">                        &lt;</span><span class="ct-915666">li</span><span class="ct-248813"> </span><span class="ct-118306">v-for</span><span class="ct-248813">=</span><span class="ct-088893">&quot;blog_category_l2 of blog_category_l1.children&quot;</span><span class="ct-248813"> </span><span class="ct-118306">:key</span><span class="ct-248813">=</span><span class="ct-088893">&quot;blog_category_l2._path&quot;</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="12"><span class="ct-248813">                            &lt;</span><span class="ct-915666">p</span><span class="ct-248813">&gt;{{ blog_category_l2.title }}&lt;/</span><span class="ct-915666">p</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="13"><span>
+</span></span><span class="line" line="14"><span class="ct-248813">                            </span><span class="ct-080019">&lt;!-- each blog&#39;s link --&gt;
+</span></span><span class="line" line="15"><span class="ct-248813">                            &lt;</span><span class="ct-915666">ul</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="16"><span class="ct-248813">                                &lt;</span><span class="ct-915666">li</span><span class="ct-248813"> </span><span class="ct-118306">v-for</span><span class="ct-248813">=</span><span class="ct-088893">&quot;blog of blog_category_l2.children&quot;</span><span class="ct-248813"> </span><span class="ct-118306">:key</span><span class="ct-248813">=</span><span class="ct-088893">&quot;blog._path&quot;</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="17"><span class="ct-248813">                                    &lt;</span><span class="ct-281012">NuxtLink</span><span class="ct-248813"> </span><span class="ct-118306">:to</span><span class="ct-248813">=</span><span class="ct-088893">&quot;blog._path&quot;</span><span class="ct-248813">&gt; {{ blog.title }} &lt;/</span><span class="ct-281012">NuxtLink</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="18"><span class="ct-248813">                                &lt;/</span><span class="ct-915666">li</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="19"><span class="ct-248813">                            &lt;/</span><span class="ct-915666">ul</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="20"><span>
+</span></span><span class="line" line="21"><span class="ct-248813">                        &lt;/</span><span class="ct-915666">li</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="22"><span class="ct-248813">                    &lt;/</span><span class="ct-915666">ul</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="23"><span>
+</span></span><span class="line" line="24"><span class="ct-248813">                &lt;/</span><span class="ct-915666">li</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="25"><span class="ct-248813">            &lt;/</span><span class="ct-915666">ul</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="26"><span class="ct-248813">        &lt;/</span><span class="ct-281012">ContentNavigation</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="27"><span class="ct-248813">    &lt;/</span><span class="ct-915666">div</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="28"><span class="ct-248813">&lt;/</span><span class="ct-915666">template</span><span class="ct-248813">&gt;</span></span></code></pre><!--]--><h5 id="增加博客内容页"><!--[-->增加博客内容页<!--]--></h5><p><!--[-->新增<code><!--[-->pages/[...slug].vue<!--]--></code>文件，该文件为博客内容页，它为content目录下的所有markdown文件创建路由（即url）。<!--]--></p><!--[--><pre><code><span class="line" line="1"><span class="ct-248813">&lt;</span><span class="ct-915666">template</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="2"><span class="ct-248813">    &lt;</span><span class="ct-915666">main</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="3"><span class="ct-248813">        &lt;</span><span class="ct-281012">ContentDoc</span><span class="ct-248813"> /&gt;
+</span></span><span class="line" line="4"><span class="ct-248813">    &lt;/</span><span class="ct-915666">main</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="5"><span class="ct-248813">&lt;/</span><span class="ct-915666">template</span><span class="ct-248813">&gt;</span></span></code></pre><!--]--><p><!--[-->修改<code><!--[-->app.vue<!--]--></code>为如下内容。<!--]--></p><!--[--><pre><code><span class="line" line="1"><span class="ct-248813">&lt;</span><span class="ct-915666">template</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="2"><span class="ct-248813">  &lt;</span><span class="ct-281012">NuxtPage</span><span class="ct-248813"> /&gt;
+</span></span><span class="line" line="3"><span class="ct-248813">&lt;/</span><span class="ct-915666">template</span><span class="ct-248813">&gt;</span></span></code></pre><!--]--><h5 id="代码高亮"><!--[-->代码高亮<!--]--></h5><p><!--[-->在<code><!--[-->nuxt.config.ts<!--]--></code>文件添加<code><!--[-->content.highlight<!--]--></code>配置，使能代码块高亮。<!--]--></p><!--[--><pre><code><span class="line" line="1"><span class="ct-080019">// https://nuxt.com/docs/api/configuration/nuxt-config
+</span></span><span class="line" line="2"><span class="ct-257789">export</span><span class="ct-248813"> </span><span class="ct-257789">default</span><span class="ct-248813"> </span><span class="ct-118306">defineNuxtConfig</span><span class="ct-248813">({
+</span></span><span class="line" line="3"><span class="ct-248813">  devtools: { enabled: </span><span class="ct-390898">false</span><span class="ct-248813"> },
+</span></span><span class="line" line="4"><span class="ct-248813">  modules: [
+</span></span><span class="line" line="5"><span class="ct-248813">    </span><span class="ct-088893">&#39;@nuxt/content&#39;
+</span></span><span class="line" line="6"><span class="ct-248813">  ],
+</span></span><span class="line" line="7"><span class="ct-248813">  content: {
+</span></span><span class="line" line="8"><span class="ct-248813">    </span><span class="ct-080019">// https://content.nuxtjs.org/api/configuration
+</span></span><span class="line" line="9"><span class="ct-248813">    highlight: {
+</span></span><span class="line" line="10"><span class="ct-248813">      theme: {
+</span></span><span class="line" line="11"><span class="ct-248813">        </span><span class="ct-080019">// Default theme (same as single string)
+</span></span><span class="line" line="12"><span class="ct-248813">        default: </span><span class="ct-088893">&#39;github-light&#39;</span><span class="ct-248813">,
+</span></span><span class="line" line="13"><span class="ct-248813">        </span><span class="ct-080019">// Theme used if `html.dark`
+</span></span><span class="line" line="14"><span class="ct-248813">        dark: </span><span class="ct-088893">&#39;github-dark&#39;</span><span class="ct-248813">,
+</span></span><span class="line" line="15"><span class="ct-248813">        </span><span class="ct-080019">// Theme used if `html.sepia`
+</span></span><span class="line" line="16"><span class="ct-248813">        sepia: </span><span class="ct-088893">&#39;monokai&#39;
+</span></span><span class="line" line="17"><span class="ct-248813">      }
+</span></span><span class="line" line="18"><span class="ct-248813">    },
+</span></span><span class="line" line="19"><span class="ct-248813">  }
+</span></span><span class="line" line="20"><span class="ct-248813">})</span></span></code></pre><!--]--><h5 id="代码块简单样式"><!--[-->代码块简单样式<!--]--></h5><p><!--[-->给代码块加上一些简单样式，使其稍显美观。<!--]--></p><!--[--><pre><code><span class="line" line="1"><span class="ct-248813">&lt;</span><span class="ct-915666">template</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="2"><span class="ct-248813">    &lt;</span><span class="ct-915666">slot</span><span class="ct-248813"> </span><span class="ct-281012">/</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="3"><span class="ct-248813">&lt;/</span><span class="ct-915666">template</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="4"><span class="ct-248813">  
+</span></span><span class="line" line="5"><span class="ct-248813">&lt;</span><span class="ct-915666">script</span><span class="ct-248813"> </span><span class="ct-118306">setup</span><span class="ct-248813"> </span><span class="ct-118306">lang</span><span class="ct-248813">=</span><span class="ct-088893">&quot;ts&quot;</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="6"><span class="ct-118306">defineProps</span><span class="ct-248813">({
+</span></span><span class="line" line="7"><span class="ct-248813">    code: {
+</span></span><span class="line" line="8"><span class="ct-248813">        type: String,
+</span></span><span class="line" line="9"><span class="ct-248813">        default: </span><span class="ct-088893">&#39;&#39;
+</span></span><span class="line" line="10"><span class="ct-248813">    },
+</span></span><span class="line" line="11"><span class="ct-248813">    language: {
+</span></span><span class="line" line="12"><span class="ct-248813">        type: String,
+</span></span><span class="line" line="13"><span class="ct-248813">        default: </span><span class="ct-390898">null
+</span></span><span class="line" line="14"><span class="ct-248813">    },
+</span></span><span class="line" line="15"><span class="ct-248813">    filename: {
+</span></span><span class="line" line="16"><span class="ct-248813">        type: String,
+</span></span><span class="line" line="17"><span class="ct-248813">        default: </span><span class="ct-390898">null
+</span></span><span class="line" line="18"><span class="ct-248813">    },
+</span></span><span class="line" line="19"><span class="ct-248813">    highlights: {
+</span></span><span class="line" line="20"><span class="ct-248813">        type: Array </span><span class="ct-257789">as</span><span class="ct-248813"> () </span><span class="ct-391872">=&gt;</span><span class="ct-248813"> </span><span class="ct-667354">number</span><span class="ct-248813">[],
+</span></span><span class="line" line="21"><span class="ct-248813">        </span><span class="ct-118306">default</span><span class="ct-248813">: () </span><span class="ct-391872">=&gt;</span><span class="ct-248813"> []
+</span></span><span class="line" line="22"><span class="ct-248813">    },
+</span></span><span class="line" line="23"><span class="ct-248813">    meta: {
+</span></span><span class="line" line="24"><span class="ct-248813">        type: String,
+</span></span><span class="line" line="25"><span class="ct-248813">        default: </span><span class="ct-390898">null
+</span></span><span class="line" line="26"><span class="ct-248813">    }
+</span></span><span class="line" line="27"><span class="ct-248813">})
+</span></span><span class="line" line="28"><span class="ct-248813">&lt;/</span><span class="ct-915666">script</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="29"><span>
+</span></span><span class="line" line="30"><span class="ct-248813">&lt;</span><span class="ct-915666">style</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="31"><span class="ct-915666">pre</span><span class="ct-248813"> </span><span class="ct-915666">code</span><span class="ct-248813"> </span><span class="ct-118306">.line</span><span class="ct-248813"> {
+</span></span><span class="line" line="32"><span class="ct-248813">    </span><span class="ct-667354">display</span><span class="ct-248813">: </span><span class="ct-667353">block</span><span class="ct-248813">;
+</span></span><span class="line" line="33"><span class="ct-248813">    </span><span class="ct-667354">min-height</span><span class="ct-248813">: </span><span class="ct-390898">1</span><span class="ct-257789">rem</span><span class="ct-248813">;
+</span></span><span class="line highlight" line="34"><span class="ct-248813">    </span><span class="ct-667354">font-family</span><span class="ct-248813">: </span><span class="ct-088893">&#39;Courier New&#39;</span><span class="ct-248813">, </span><span class="ct-667353">Courier</span><span class="ct-248813">, </span><span class="ct-667353">monospace</span><span class="ct-248813">;
+</span></span><span class="line highlight" line="35"><span class="ct-248813">}
+</span></span><span class="line highlight" line="36"><span>
+</span></span><span class="line highlight" line="37"><span class="ct-915666">pre</span><span class="ct-248813"> {
+</span></span><span class="line highlight" line="38"><span class="ct-248813">    </span><span class="ct-667354">padding</span><span class="ct-248813">: </span><span class="ct-390898">1</span><span class="ct-257789">rem</span><span class="ct-248813">;
+</span></span><span class="line highlight" line="39"><span class="ct-248813">    </span><span class="ct-667354">border</span><span class="ct-248813">: </span><span class="ct-667353">solid</span><span class="ct-248813"> </span><span class="ct-390898">1</span><span class="ct-257789">px</span><span class="ct-248813"> </span><span class="ct-667353">rgb</span><span class="ct-248813">(</span><span class="ct-390898">62</span><span class="ct-248813">, </span><span class="ct-390898">95</span><span class="ct-248813">, </span><span class="ct-390898">109</span><span class="ct-248813">);
+</span></span><span class="line highlight" line="40"><span class="ct-248813">}
+</span></span><span class="line highlight" line="41"><span>
+</span></span><span class="line highlight" line="42"><span class="ct-118306">.highlight</span><span class="ct-248813"> {
+</span></span><span class="line highlight" line="43"><span class="ct-248813">    </span><span class="ct-667354">background-color</span><span class="ct-248813">: </span><span class="ct-667353">lightblue</span><span class="ct-248813">;
+</span></span><span class="line highlight" line="44"><span class="ct-248813">}
+</span></span><span class="line" line="45"><span class="ct-248813">&lt;/</span><span class="ct-915666">style</span><span class="ct-248813">&gt;</span></span></code></pre><!--]--><h5 id="图片简单样式"><!--[-->图片简单样式<!--]--></h5><p><!--[-->暂时采用给图片设置最大高度的方式避免图片占用屏幕的高度太大。<!--]--></p><!--[--><pre><code><span class="line" line="1"><span class="ct-248813">&lt;</span><span class="ct-915666">template</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="2"><span class="ct-248813">    &lt;</span><span class="ct-915666">img</span><span class="ct-248813"> </span><span class="ct-118306">:src</span><span class="ct-248813">=</span><span class="ct-088893">&quot;refinedSrc&quot;</span><span class="ct-248813"> </span><span class="ct-118306">:alt</span><span class="ct-248813">=</span><span class="ct-088893">&quot;alt&quot;</span><span class="ct-248813"> </span><span class="ct-118306">:width</span><span class="ct-248813">=</span><span class="ct-088893">&quot;width&quot;</span><span class="ct-248813"> </span><span class="ct-118306">:height</span><span class="ct-248813">=</span><span class="ct-088893">&quot;height&quot;</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="3"><span class="ct-248813">&lt;/</span><span class="ct-915666">template</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="4"><span class="ct-248813">  
+</span></span><span class="line" line="5"><span class="ct-248813">&lt;</span><span class="ct-915666">script</span><span class="ct-248813"> </span><span class="ct-118306">setup</span><span class="ct-248813"> </span><span class="ct-118306">lang</span><span class="ct-248813">=</span><span class="ct-088893">&quot;ts&quot;</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="6"><span class="ct-257789">import</span><span class="ct-248813"> { withBase } </span><span class="ct-257789">from</span><span class="ct-248813"> </span><span class="ct-088893">&#39;ufo&#39;
+</span></span><span class="line" line="7"><span class="ct-257789">import</span><span class="ct-248813"> { useRuntimeConfig, computed } </span><span class="ct-257789">from</span><span class="ct-248813"> </span><span class="ct-088893">&#39;#imports&#39;
+</span></span><span class="line" line="8"><span>
+</span></span><span class="line" line="9"><span class="ct-391872">const</span><span class="ct-248813"> </span><span class="ct-900255">props</span><span class="ct-248813"> </span><span class="ct-257789">=</span><span class="ct-248813"> </span><span class="ct-118306">defineProps</span><span class="ct-248813">({
+</span></span><span class="line" line="10"><span class="ct-248813">    src: {
+</span></span><span class="line" line="11"><span class="ct-248813">        type: String,
+</span></span><span class="line" line="12"><span class="ct-248813">        default: </span><span class="ct-088893">&#39;&#39;
+</span></span><span class="line" line="13"><span class="ct-248813">    },
+</span></span><span class="line" line="14"><span class="ct-248813">    alt: {
+</span></span><span class="line" line="15"><span class="ct-248813">        type: String,
+</span></span><span class="line" line="16"><span class="ct-248813">        default: </span><span class="ct-088893">&#39;&#39;
+</span></span><span class="line" line="17"><span class="ct-248813">    },
+</span></span><span class="line" line="18"><span class="ct-248813">    width: {
+</span></span><span class="line" line="19"><span class="ct-248813">        type: [String, Number],
+</span></span><span class="line" line="20"><span class="ct-248813">        default: </span><span class="ct-390898">undefined
+</span></span><span class="line" line="21"><span class="ct-248813">    },
+</span></span><span class="line" line="22"><span class="ct-248813">    height: {
+</span></span><span class="line" line="23"><span class="ct-248813">        type: [String, Number],
+</span></span><span class="line" line="24"><span class="ct-248813">        default: </span><span class="ct-390898">undefined
+</span></span><span class="line" line="25"><span class="ct-248813">    }
+</span></span><span class="line" line="26"><span class="ct-248813">})
+</span></span><span class="line" line="27"><span>
+</span></span><span class="line" line="28"><span class="ct-391872">const</span><span class="ct-248813"> </span><span class="ct-900255">refinedSrc</span><span class="ct-248813"> </span><span class="ct-257789">=</span><span class="ct-248813"> </span><span class="ct-118306">computed</span><span class="ct-248813">(() </span><span class="ct-391872">=&gt;</span><span class="ct-248813"> {
+</span></span><span class="line" line="29"><span class="ct-248813">    </span><span class="ct-257789">if</span><span class="ct-248813"> (props.src?.</span><span class="ct-118306">startsWith</span><span class="ct-248813">(</span><span class="ct-088893">&#39;/&#39;</span><span class="ct-248813">) </span><span class="ct-257789">&amp;&amp;</span><span class="ct-248813"> </span><span class="ct-257789">!</span><span class="ct-248813">props.src.</span><span class="ct-118306">startsWith</span><span class="ct-248813">(</span><span class="ct-088893">&#39;//&#39;</span><span class="ct-248813">)) {
+</span></span><span class="line" line="30"><span class="ct-248813">        </span><span class="ct-257789">return</span><span class="ct-248813"> </span><span class="ct-118306">withBase</span><span class="ct-248813">(props.src, </span><span class="ct-118306">useRuntimeConfig</span><span class="ct-248813">().app.baseURL)
+</span></span><span class="line" line="31"><span class="ct-248813">    }
+</span></span><span class="line" line="32"><span class="ct-248813">    </span><span class="ct-257789">return</span><span class="ct-248813"> props.src
+</span></span><span class="line" line="33"><span class="ct-248813">})
+</span></span><span class="line" line="34"><span class="ct-248813">&lt;/</span><span class="ct-915666">script</span><span class="ct-248813">&gt;
+</span></span><span class="line" line="35"><span>
+</span></span><span class="line highlight" line="36"><span class="ct-248813">&lt;</span><span class="ct-915666">style</span><span class="ct-248813">&gt;
+</span></span><span class="line highlight" line="37"><span class="ct-915666">img</span><span class="ct-248813"> {
+</span></span><span class="line highlight" line="38"><span class="ct-248813">    </span><span class="ct-667354">max-height</span><span class="ct-248813">: </span><span class="ct-390898">25</span><span class="ct-257789">vh</span><span class="ct-248813">;
+</span></span><span class="line highlight" line="39"><span class="ct-248813">}
+</span></span><span class="line highlight" line="40"><span class="ct-248813">&lt;/</span><span class="ct-915666">style</span><span class="ct-248813">&gt;</span></span></code></pre><!--]--><h3 id="添加一篇示例博客"><a href="#添加一篇示例博客"><!--[-->添加一篇示例博客<!--]--></a></h3><p><!--[--><code><!--[-->Content<!--]--></code>目录结构应如下所示，有两层子目录：<!--]--></p><!--[--><pre><code><span class="line" line="1"><span>content
+</span></span><span class="line" line="2"><span>└── 0.categoryA
+</span></span><span class="line" line="3"><span>    ├── 0.categoryB
+</span></span><span class="line" line="4"><span>    │   ├── 1.Hello.md
+</span></span><span class="line" line="5"><span>    │   └── _dir.yml
+</span></span><span class="line" line="6"><span>    └── _dir.yml</span></span></code></pre><!--]--><p><!--[-->其中序号用于目录排序。<code><!--[-->_dir.yml<!--]--></code>文件可用于保存文件夹路径的信息，如下。注意<code><!--[-->Content<!--]--></code>目录下的文件夹或文件名不能是中文。<!--]--></p><!--[--><pre><code><span class="line" line="1"><span class="ct-915666">title</span><span class="ct-248813">: </span><span class="ct-088893">&#39;目录A&#39;
+</span></span><span class="line" line="2"><span class="ct-915666">navigation.icon</span><span class="ct-248813">: </span><span class="ct-088893">&#39;📁&#39;</span></span></code></pre><!--]--><p><!--[-->博客内容<!--]--></p><!--[--><pre><code><span class="line" line="1"><span class="ct-248813">---
+</span></span><span class="line" line="2"><span class="ct-915666">title</span><span class="ct-248813">: </span><span class="ct-088893">&#39;博客标题&#39;
+</span></span><span class="line" line="3"><span class="ct-248813">---
+</span></span><span class="line" line="4"><span>
+</span></span><span class="line" line="5"><span class="ct-680416"># Hello Content</span></span></code></pre><!--]--><h5 id="效果"><!--[-->效果<!--]--></h5><p><!--[-->目录页<!--]--></p><p><!--[--><img src="/blog/images-blog/web-dev/blog-dev/blog-using-nuxtjs/demo-category-page.png" alt="目录页效果"><!--]--></p><p><!--[-->博客页<!--]--></p><p><!--[--><img src="/blog/images-blog/web-dev/blog-dev/blog-using-nuxtjs/demo-blog-page.png" alt="博客页效果"><!--]--></p><h2 id="运行生成和发布"><a href="#运行生成和发布"><!--[-->运行、生成和发布<!--]--></a></h2><h3 id="本机操作"><a href="#本机操作"><!--[-->本机操作<!--]--></a></h3><h5 id="本机运行项目"><!--[-->本机运行项目<!--]--></h5><!--[--><pre><code><span class="line" line="1"><span class="ct-118306">npm</span><span class="ct-248813"> </span><span class="ct-088893">run</span><span class="ct-248813"> </span><span class="ct-088893">dev</span><span class="ct-248813"> </span><span class="ct-390898">--</span><span class="ct-248813"> </span><span class="ct-390898">-o</span></span></code></pre><!--]--><h5 id="生成静态网页"><!--[-->生成静态网页<!--]--></h5><ul><!--[--><li><!--[-->设置baseURL<!--]--></li><!--]--></ul><p><!--[-->部署在github page后，博客路径为&lt;域名&gt;/&lt;仓库名&gt;/，需要设置nuxtjs，使得路由中包含仓库名。<!--]--></p><!--[--><pre><code><span class="line" line="1"><span class="ct-248813">{
+</span></span><span class="line" line="2"><span class="ct-248813">  </span><span class="ct-667354">&quot;name&quot;</span><span class="ct-248813">: </span><span class="ct-644940">&quot;nuxt-app&quot;</span><span class="ct-248813">,
+</span></span><span class="line" line="3"><span class="ct-248813">  </span><span class="ct-667354">&quot;private&quot;</span><span class="ct-248813">: </span><span class="ct-390898">true</span><span class="ct-248813">,
+</span></span><span class="line" line="4"><span class="ct-248813">  </span><span class="ct-667354">&quot;scripts&quot;</span><span class="ct-248813">: {
+</span></span><span class="line" line="5"><span class="ct-248813">    </span><span class="ct-667354">&quot;build&quot;</span><span class="ct-248813">: </span><span class="ct-644940">&quot;nuxt build&quot;</span><span class="ct-248813">,
+</span></span><span class="line" line="6"><span class="ct-248813">    </span><span class="ct-667354">&quot;dev&quot;</span><span class="ct-248813">: </span><span class="ct-644940">&quot;nuxt dev&quot;</span><span class="ct-248813">,
+</span></span><span class="line highlight" line="7"><span class="ct-248813">    </span><span class="ct-667354">&quot;generate&quot;</span><span class="ct-248813">: </span><span class="ct-644940">&quot;NUXT_APP_BASE_URL=/blog/ nuxt generate&quot;</span><span class="ct-248813">,
+</span></span><span class="line" line="8"><span class="ct-248813">    </span><span class="ct-667354">&quot;preview&quot;</span><span class="ct-248813">: </span><span class="ct-644940">&quot;nuxt preview&quot;</span><span class="ct-248813">,
+</span></span><span class="line" line="9"><span class="ct-248813">    </span><span class="ct-667354">&quot;postinstall&quot;</span><span class="ct-248813">: </span><span class="ct-644940">&quot;nuxt prepare&quot;
+</span></span><span class="line" line="10"><span class="ct-248813">  },
+</span></span><span class="line" line="11"><span class="ct-248813">  </span><span class="ct-667354">&quot;devDependencies&quot;</span><span class="ct-248813">: {
+</span></span><span class="line" line="12"><span class="ct-248813">    </span><span class="ct-667354">&quot;@nuxt/content&quot;</span><span class="ct-248813">: </span><span class="ct-644940">&quot;^2.7.2&quot;</span><span class="ct-248813">,
+</span></span><span class="line" line="13"><span class="ct-248813">    </span><span class="ct-667354">&quot;@nuxt/devtools&quot;</span><span class="ct-248813">: </span><span class="ct-644940">&quot;latest&quot;</span><span class="ct-248813">,
+</span></span><span class="line" line="14"><span class="ct-248813">    </span><span class="ct-667354">&quot;@types/node&quot;</span><span class="ct-248813">: </span><span class="ct-644940">&quot;^18.17.3&quot;</span><span class="ct-248813">,
+</span></span><span class="line" line="15"><span class="ct-248813">    </span><span class="ct-667354">&quot;nuxt&quot;</span><span class="ct-248813">: </span><span class="ct-644940">&quot;^3.6.5&quot;
+</span></span><span class="line" line="16"><span class="ct-248813">  }
+</span></span><span class="line" line="17"><span class="ct-248813">}</span></span></code></pre><!--]--><ul><!--[--><li><!--[-->生成静态网页，用于部署。
+执行下面的语句，输出在<code><!--[-->.output/public<!--]--></code>目录。<!--]--></li><!--]--></ul><!--[--><pre><code><span class="line" line="1"><span class="ct-118306">npm</span><span class="ct-248813"> </span><span class="ct-088893">run</span><span class="ct-248813"> </span><span class="ct-088893">generate</span></span></code></pre><!--]--><h3 id="部署博客"><a href="#部署博客"><!--[-->部署博客<!--]--></a></h3><p><!--[-->这里部署采用的是直接上传生成的静态网页的方式，Github也提供对源码编译生成静态网页的功能。<!--]--></p><h5 id="拷贝生成的静态网页到blogblogstaticoutput"><!--[-->拷贝生成的静态网页到<code><!--[-->/Blog/BlogStaticOutput<!--]--></code><!--]--></h5><!--[--><pre><code><span class="line" line="1"><span class="ct-667353">cd</span><span class="ct-248813"> </span><span class="ct-088893">/Blog/BlogStaticOutput
+</span></span><span class="line" line="2"><span class="ct-118306">rm</span><span class="ct-248813"> </span><span class="ct-390898">-rf</span><span class="ct-248813"> </span><span class="ct-572354">*
+</span></span><span class="line" line="3"><span class="ct-118306">cp</span><span class="ct-248813"> </span><span class="ct-390898">-rL</span><span class="ct-248813"> </span><span class="ct-088893">/Blog/BlogProject/.output/public/</span><span class="ct-572354">*</span><span class="ct-248813"> </span><span class="ct-088893">.</span><span class="ct-248813"> </span><span class="ct-080019"># 拷贝生成的静态网页。
+</span></span><span class="line" line="4"><span class="ct-118306">touch</span><span class="ct-248813"> </span><span class="ct-088893">.nojekyll</span><span class="ct-248813"> </span><span class="ct-080019"># 创建此空文件，否则部署后无法显示样式。</span></span></code></pre><!--]--><h5 id="上传静态网页到github"><!--[-->上传静态网页到Github<!--]--></h5><p><!--[-->使用Git上传<code><!--[-->/Blog/BlogStaticOutput<!--]--></code>到Github<!--]--></p><h5 id="github仓库开启page服务"><!--[-->Github仓库开启Page服务<!--]--></h5><p><!--[--><img src="/blog/images-blog/web-dev/blog-dev/blog-using-nuxtjs/open-github-repo-page-service.png" alt="开启github page"><!--]--></p><h2 id="参考"><a href="#参考"><!--[-->参考<!--]--></a></h2><h5 id="链接"><!--[-->链接<!--]--></h5><ul><!--[--><li><!--[--><a href="https://nuxt.com/docs/getting-started/installation" rel="nofollow"><!--[-->Installation · Get Started with Nuxt<!--]--></a><!--]--></li><!--]--></ul><h5 id="设置docker镜像源"><!--[-->设置Docker镜像源<!--]--></h5><!--[--><pre><code><span class="line" line="1"><span class="ct-248813">{
+</span></span><span class="line" line="2"><span class="ct-248813">  </span><span class="ct-667354">&quot;registry-mirrors&quot;</span><span class="ct-248813">: [
+</span></span><span class="line" line="3"><span class="ct-248813">    </span><span class="ct-644940">&quot;https://registry.docker-cn.com&quot;</span><span class="ct-248813">,
+</span></span><span class="line" line="4"><span class="ct-248813">    </span><span class="ct-644940">&quot;https://cr.console.aliyun.com&quot;
+</span></span><span class="line" line="5"><span class="ct-248813">  ]
+</span></span><span class="line" line="6"><span class="ct-248813">}</span></span></code></pre><!--]--><p><!--[--><img src="/blog/images-blog/web-dev/blog-dev/blog-using-nuxtjs/docker-set-mirror.png" alt="设置Docker镜像源"><!--]--></p><style>.ct-118306{color:#6F42C1;}
+.dark .ct-118306{color:#B392F0;}
+.sepia .ct-118306{color:#A6E22E;}
+.ct-248813{color:#24292E;}
+.dark .ct-248813{color:#E1E4E8;}
+.sepia .ct-248813{color:#F8F8F2;}
+.ct-088893{color:#032F62;}
+.dark .ct-088893{color:#9ECBFF;}
+.sepia .ct-088893{color:#E6DB74;}
+.ct-390898{color:#005CC5;}
+.dark .ct-390898{color:#79B8FF;}
+.sepia .ct-390898{color:#AE81FF;}
+.ct-257789{color:#D73A49;}
+.dark .ct-257789{color:#F97583;}
+.sepia .ct-257789{color:#F92672;}
+.ct-667353{color:#005CC5;}
+.dark .ct-667353{color:#79B8FF;}
+.sepia .ct-667353{color:#66D9EF;}
+.ct-080019{color:#6A737D;}
+.sepia .ct-080019{color:#88846F;}
+.ct-915666{color:#22863A;}
+.dark .ct-915666{color:#85E89D;}
+.sepia .ct-915666{color:#F92672;}
+.ct-281012{color:#B31D28;font-style:italic;}
+.dark .ct-281012{color:#FDAEB7;font-style:italic;}
+.sepia .ct-281012{color:#F44747;font-style:unset;}
+.ct-391872{color:#D73A49;}
+.dark .ct-391872{color:#F97583;}
+.sepia .ct-391872{color:#66D9EF;font-style:italic;}
+.ct-667354{color:#005CC5;}
+.dark .ct-667354{color:#79B8FF;}
+.sepia .ct-667354{color:#66D9EF;font-style:italic;}
+.ct-900255{color:#005CC5;}
+.dark .ct-900255{color:#79B8FF;}
+.sepia .ct-900255{color:#F8F8F2;}
+.ct-680416{color:#005CC5;font-weight:bold;}
+.dark .ct-680416{color:#79B8FF;font-weight:bold;}
+.sepia .ct-680416{color:#A6E22E;font-weight:bold;}
+.ct-644940{color:#032F62;}
+.dark .ct-644940{color:#9ECBFF;}
+.sepia .ct-644940{color:#CFCFC2;}
+.ct-572354{color:#005CC5;}
+.dark .ct-572354{color:#79B8FF;}
+.sepia .ct-572354{color:#FD971F;}</style></div><!--]--></main></div><script type="application/json" id="__NUXT_DATA__" data-ssr="true" data-src="/blog/web-dev/blog-dev/blog-using-nuxtjs/_payload.json">[{"state":1,"_errors":3,"serverRendered":6,"path":7,"prerenderedAt":8},["Reactive",2],{},["Reactive",4],{"content-query-ZDjuwxgvmJ":5},null,true,"/web-dev/blog-dev/blog-using-nuxtjs",1692534287367]</script><script>window.__NUXT__={};window.__NUXT__.config={public:{content:{locales:[],defaultLocale:"",integrity:1692534257059,experimental:{stripQueryParameters:false,clientDB:false},respectPathCase:false,api:{baseURL:"/api/_content"},navigation:{fields:[]},tags:{p:"prose-p",a:"prose-a",blockquote:"prose-blockquote","code-inline":"prose-code-inline",code:"prose-code",em:"prose-em",h1:"prose-h1",h2:"prose-h2",h3:"prose-h3",h4:"prose-h4",h5:"prose-h5",h6:"prose-h6",hr:"prose-hr",img:"prose-img",ul:"prose-ul",ol:"prose-ol",li:"prose-li",strong:"prose-strong",table:"prose-table",thead:"prose-thead",tbody:"prose-tbody",td:"prose-td",th:"prose-th",tr:"prose-tr"},highlight:{theme:{default:"github-light",dark:"github-dark",sepia:"monokai"}},wsUrl:"",documentDriven:false,host:"",trailingSlash:false,anchorLinks:{depth:4,exclude:[1]}}},app:{baseURL:"/blog/",buildAssetsDir:"/_nuxt/",cdnURL:""}}</script><script type="module" src="/blog/_nuxt/entry.037bd558.js" crossorigin></script></body>
+</html>
